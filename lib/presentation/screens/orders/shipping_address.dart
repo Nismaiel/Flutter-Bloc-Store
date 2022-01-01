@@ -98,7 +98,6 @@ class _ShippingAddressState extends State<ShippingAddress> {
   void initState() {
     // TODO: implement initState
   BlocProvider.of<LocationBloc>(context).add(GetLocation());
-
   super.initState();
   }
   @override
