@@ -19,7 +19,6 @@ List<Product> products=[];
    return products;
 
  }catch(e){
-   print(e.toString());
    return[];
  }
 }

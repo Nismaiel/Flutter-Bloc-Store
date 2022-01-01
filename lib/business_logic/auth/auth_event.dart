@@ -10,7 +10,12 @@ abstract class AuthEvent extends Equatable {
 class StartRegister extends AuthEvent{
   final String mail;
   final String password;
-  const StartRegister(this.mail,this.password);
+  final bool seller;
+  const StartRegister(this.mail,this.password,this.seller);
+}
+class ValidateRegisterForm extends AuthEvent{
+  final bool validate;
+  const ValidateRegisterForm({this.validate=false});
 }
 class StartLogin extends AuthEvent{
   final String mail;

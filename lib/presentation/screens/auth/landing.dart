@@ -1,6 +1,10 @@
+import 'package:bruva/business_logic/auth/auth_bloc.dart';
+import 'package:bruva/consts/constants.dart';
 import 'package:bruva/presentation/screens/auth/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'login.dart';
 
@@ -12,6 +16,7 @@ class landing extends StatefulWidget {
 }
 
 class _landingState extends State<landing> {
+
   Widget LandingForm() {
     return Column(
       children: [
@@ -84,11 +89,24 @@ class _landingState extends State<landing> {
       crossAxisAlignment: CrossAxisAlignment.center,
     );
   }
+@override
+  void initState() {
+    // TODO: implement initState
 
+  BlocProvider.of<AuthBloc>(context).add(CheckForLogin());
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LandingForm(),
+      body: BlocBuilder<AuthBloc,AuthState>(builder: (context, state) {
+        if(state is LoggedIn){
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            Navigator.pushReplacementNamed(context, buyProducts);
+          });
+          return const Center(child: CircularProgressIndicator(),);
+        }else {return LandingForm();}
+      },),
     );
   }
 }

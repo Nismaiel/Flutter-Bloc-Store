@@ -22,10 +22,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(LoadingState());
         try {
           var products = await productsRepo.getAllProducts();
-          print(products);
           emit(ProductsLoaded(products: products));
         } catch (e) {
-          print(e.toString());
           emit(ErrorState(message: e.toString()));
         }
       }

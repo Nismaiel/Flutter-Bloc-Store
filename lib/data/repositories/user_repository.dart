@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:http/http.dart'as http;
 class UserRepository {
   Future register(String email, String password) async {
     try {
+
       final UserCredential user = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-      print(user);
-      return user;
     } catch (e) {
       print(e.toString());
     }
@@ -31,7 +30,6 @@ class UserRepository {
   isSignedIn() {
     try {
       final currentUser = FirebaseAuth.instance.currentUser;
-      print(currentUser != null);
       return currentUser != null;
     } catch (e) {
       print(e.toString());
@@ -59,9 +57,5 @@ Future passwordResetConfirmation(String code,String newPassword)async{
     await FirebaseAuth.instance.confirmPasswordReset(code: code, newPassword: newPassword);
 }
 
-  Future getUser() async {
-    final userMail = await FirebaseAuth.instance.currentUser!.email;
-    print(userMail);
-    return userMail;
-  }
+
 }

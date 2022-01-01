@@ -1,8 +1,11 @@
-import 'dart:async';
 
+
+import 'package:bruva/business_logic/location/location_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'map.dart';
 
@@ -47,10 +50,7 @@ class _ShippingAddressState extends State<ShippingAddress> {
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
         width: double.infinity,
-        height: MediaQuery
-            .of(context)
-            .size
-            .height / 3.3,
+
         color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,18 +94,25 @@ class _ShippingAddressState extends State<ShippingAddress> {
     );
   }
 
+@override
+  void initState() {
+    // TODO: implement initState
+  BlocProvider.of<LocationBloc>(context).add(GetLocation());
+
+  super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      backgroundColor: Colors.white60,
+      // backgroundColor: Colors.white60,
       body: Column(
         children: [
           personalInfoForm(),
           Padding(padding: EdgeInsets.only(top: 8.0),
             child: ElevatedButton(onPressed: () {
               Navigator.of(context).push(CupertinoPageRoute(
-                builder: (context) => const PickLocation(),));
+                builder: (context) {return BlocProvider(create: (context) => LocationBloc(),child:const PickLocation(),);},));
             }, child: Text('Pick Location')),),
         ],
       ),

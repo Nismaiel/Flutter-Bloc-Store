@@ -1,7 +1,7 @@
-import 'dart:async';
-
+import 'package:bruva/business_logic/location/location_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 class PickLocation extends StatefulWidget {
   const PickLocation({Key? key}) : super(key: key);
 
@@ -10,12 +10,19 @@ class PickLocation extends StatefulWidget {
 }
 
 class _PickLocationState extends State<PickLocation> {
-  Completer<GoogleMapController> _controller = Completer();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body:Stack(children: [
-    GoogleMap(mapToolbarEnabled: true,mapType: MapType.hybrid,initialCameraPosition:CameraPosition(zoom: 12,target: LatLng(10, 10)),),
-    ],) ,);
+    return Scaffold(
+      body: BlocBuilder<LocationBloc, LocationState>(
+        builder: (context, state) {
+          if (state is LocationLoaded) {
+            return Text(state.location.toString());
+          } else if (state is LocationLoading) {
+            return const CircularProgressIndicator();
+          }else{return Center(child: Text(state.toString()),);}
+        },
+      ),
+    );
   }
 }

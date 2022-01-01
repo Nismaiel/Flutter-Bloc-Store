@@ -54,9 +54,9 @@ class _CartScreenState extends State<CartScreen> {
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
                         ),
-                        onPressed: () {
+                        onPressed:state.cartItems.products.isEmpty?(){}: () {
                           BlocProvider.of<OrdersBloc>(context).add(AddOrder(products: state.cartItems.products, cartTotal: state.cartItems.total, orderId: DateTime.now().millisecondsSinceEpoch));
-                          Navigator.push(context, CupertinoPageRoute(builder:(_)=>OrderNowScreen()));
+                          Navigator.push(context, CupertinoPageRoute(builder:(_)=>const OrderNowScreen()));
                         },
 
                       )

@@ -117,10 +117,10 @@ class _AllProductsState extends State<AllProducts> {
                   onPressed: () {
                     Navigator.pushNamed(context, cartPage);
                   }),
-             // BlocBuilder<CartBloc,CartState>(builder:(context, state) {
-             //   if( state.cartItems.products.length!=null){
-             //    return Text(state.cartItems.products.length.toString());}
-             // }, )
+              BlocBuilder<CartBloc,CartState>(builder:(context, state) {
+                if(state.cartItems!=null&& state.cartItems.products.length!=0){
+                  return Text(state.cartItems.products.length.toString());}else {return SizedBox();}
+              }, )
             ],
           ),
           IconButton(
@@ -131,7 +131,7 @@ class _AllProductsState extends State<AllProducts> {
               Navigator.pushNamed(context, favoritesPage);
               }),
         ],
-        title: const Text(
+        title:  Text(
           'Bruva',
           style: TextStyle(color: Colors.white),
         ),

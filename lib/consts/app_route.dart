@@ -1,3 +1,4 @@
+import 'package:bruva/business_logic/auth/auth_bloc.dart';
 import 'package:bruva/business_logic/products/product_bloc.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:bruva/data/repositories/products_repo.dart';
@@ -24,7 +25,9 @@ class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case register:
-      return MaterialPageRoute(builder: (context) => landing(),);
+      return MaterialPageRoute(builder: (context) {
+        return BlocProvider(create: (context) => AuthBloc(),child: const landing(),);
+      },);
 
       case addProduct:
         return CupertinoPageRoute(builder: (_) {

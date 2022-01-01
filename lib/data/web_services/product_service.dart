@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bruva/consts/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:dio/dio.dart';
-
+import 'package:http/http.dart'as http;
 class ProductService {
   late Dio dio;
 
@@ -32,7 +32,8 @@ class ProductService {
 
   Future getAllProducts() async {
     try {
-      Response response = await dio.get(baseUrl);
+      var response = await dio.get(baseUrl);
+
       return response.data;
     } catch (e) {
       return [];
