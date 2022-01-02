@@ -10,7 +10,7 @@ class LocationAdded extends CheckoutState {
 
 }
 
-class AddShippingData extends CheckoutState {
+class AddedShippingData extends CheckoutState {
   final String firstName;
   final String lastName;
   final String phoneNumber;
@@ -19,7 +19,7 @@ class AddShippingData extends CheckoutState {
   final String floor;
   final String additionalNotes;
 
-  AddShippingData(
+  AddedShippingData(
       {required this.phoneNumber,
       required this.lastName,
       required this.firstName,

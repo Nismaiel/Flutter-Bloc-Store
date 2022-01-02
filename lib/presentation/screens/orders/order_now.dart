@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
 import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:bruva/business_logic/orders/orders_bloc.dart';
@@ -5,6 +7,7 @@ import 'package:bruva/presentation/screens/orders/shipping_address.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderNowScreen extends StatefulWidget {
   const OrderNowScreen({Key? key}) : super(key: key);
@@ -32,7 +35,16 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
       ),
     );
   }
-
+  checkForShippingData()async{
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    String? shippingInfo=prefs.getString('shippingInfo');
+    return shippingInfo==null?json.decode(shippingInfo.toString()):Map();
+  }
+Widget dataView(){
+    return Column(children: [
+      Text(checkForShippingData().toString()),
+    ],);
+}
   PreferredSizeWidget appBar() {
     return AppBar(
       backgroundColor: Colors.white,
@@ -56,11 +68,10 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
       centerTitle: true,
     );
   }
-
   Widget shippingInfo() {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: GestureDetector(
+      child: InkWell(
         onTap: () {
           Navigator.of(context).push(CupertinoPageRoute(
             builder: (context) => MultiBlocProvider(
@@ -72,7 +83,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                   create: (context) => CheckoutCubit(),
                 ),
               ],
-              child: const ShippingAddress(),
+              child:const ShippingAddress(),
             )
           ));
         },
@@ -82,7 +93,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
           color: Colors.white,
           width: double.infinity,
           alignment: Alignment.center,
-          child: Column(
+          child:checkForShippingData()!=0?dataView() : Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: const [

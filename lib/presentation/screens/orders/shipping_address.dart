@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'map.dart';
 
@@ -14,12 +17,29 @@ class ShippingAddress extends StatefulWidget {
 class _ShippingAddressState extends State<ShippingAddress> {
   final TextEditingController _firstName = TextEditingController();
   final TextEditingController _lastName = TextEditingController();
-  final TextEditingController _phoneNumber = TextEditingController();
+  final TextEditingController _mobileNumber = TextEditingController();
   final TextEditingController _streetName = TextEditingController();
   final TextEditingController _building = TextEditingController();
   final TextEditingController _floor = TextEditingController();
+  final TextEditingController _apartment = TextEditingController();
   final TextEditingController _additionalNotes = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  saveData() async {
+    Map shippingInfo = {
+      'firstName': _firstName.text,
+      'lastName': _lastName.text,
+      'mobileNumber': _mobileNumber.text,
+      'streetName': _streetName.text,
+      "buildingNumber": _building.text,
+      'floor': _floor.text,
+      'apartment': _apartment.text,
+      'notes': _additionalNotes.text,
+    };
+    String encodedMap = json.encode(shippingInfo);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('shippingInfo', encodedMap);
+  }
 
   PreferredSizeWidget appBar() {
     return AppBar(
@@ -46,12 +66,18 @@ class _ShippingAddressState extends State<ShippingAddress> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextButton(
-              onPressed: () {
-                _formKey.currentState!.validate();
-              },
+              onPressed: _formKey.currentState!.validate()
+                  ? () async {
+                      await saveData();
+                      Navigator.pop(context);
+                    }
+                  : () {},
               child: const Text(
                 'save',
-                style: TextStyle(fontWeight: FontWeight.w600,color: Colors.black,fontSize: 17),
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    fontSize: 17),
               )),
         )
       ],
@@ -106,12 +132,15 @@ class _ShippingAddressState extends State<ShippingAddress> {
             ),
             TextFormField(
               validator: (value) {
-                if (value == null || value.isEmpty || value.length < 11) {
-                  return 'Please enter your mobile number';
+                if (value == null ||
+                    value.isEmpty ||
+                    value.length < 11 ||
+                    value.substring(0, 2).toString() != '01') {
+                  return 'Please enter valid mobile number';
                 }
                 return null;
               },
-              controller: _phoneNumber,
+              controller: _mobileNumber,
               textAlign: TextAlign.left,
               maxLength: 11,
               keyboardType: TextInputType.phone,
@@ -155,31 +184,27 @@ class _ShippingAddressState extends State<ShippingAddress> {
                   labelStyle: TextStyle(color: Colors.black45),
                   labelText: 'Street Name'),
             ),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter building number';
+                }
+                return null;
+              },
+              controller: _building,
+              textAlign: TextAlign.left,
+              minLines: 1,
+              decoration: const InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 2)),
+                  focusColor: Colors.black,
+                  // errorText: 'First Name should Contain 2-15 characters',
+                  labelStyle: TextStyle(color: Colors.black45),
+                  labelText: '*Building Number'),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 2.5,
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter building number';
-                      }
-                      return null;
-                    },
-                    controller: _building,
-                    textAlign: TextAlign.left,
-                    minLines: 1,
-                    decoration: const InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2)),
-                        focusColor: Colors.black,
-                        // errorText: 'First Name should Contain 2-15 characters',
-                        labelStyle: TextStyle(color: Colors.black45),
-                        labelText: '*Building Number'),
-                  ),
-                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 2.5,
                   child: TextFormField(
@@ -199,7 +224,29 @@ class _ShippingAddressState extends State<ShippingAddress> {
                         focusColor: Colors.black,
                         // errorText: 'First Name should Contain 2-15 characters',
                         labelStyle: TextStyle(color: Colors.black45),
-                        labelText: '*Floor/Apartment'),
+                        labelText: '*Floor'),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter apartment number';
+                      }
+                      return null;
+                    },
+                    controller: _apartment,
+                    textAlign: TextAlign.left,
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2)),
+                        focusColor: Colors.black,
+                        // errorText: 'First Name should Contain 2-15 characters',
+                        labelStyle: TextStyle(color: Colors.black45),
+                        labelText: '*Apartment'),
                   ),
                 ),
               ],
