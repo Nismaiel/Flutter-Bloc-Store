@@ -1,65 +1,50 @@
+import 'dart:async';
+
 import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class PickLocation extends StatefulWidget {
-  const PickLocation({Key? key}) : super(key: key);
+class PickLocation extends StatelessWidget {
+  PickLocation({Key? key}) : super(key: key);
 
-  @override
-  _PickLocationState createState() => _PickLocationState();
-}
+  final Completer<GoogleMapController> _controller = Completer();
 
-class _PickLocationState extends State<PickLocation> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    context.read<LocationCubit>().getLoc();
-    super.initState();
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<LocationCubit, LocationState>(
-        builder: (context, state) {
-          if (state is LocationLoaded) {
-            return Stack(
-              children: [
-                GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                        target: LatLng(
-                            state.location.latitude, state.location.longitude),
-                        zoom: 15),
-                    myLocationEnabled: true,
-                    buildingsEnabled: true,
-                    mapType: MapType.normal,
-                    myLocationButtonEnabled: true),
-                Positioned(
-                    left: 10,
-                    right: 10,
-                    bottom: 10,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                              fixedSize: MaterialStateProperty.all(Size(
-                                  MediaQuery.of(context).size.width / 1.1,
-                                  50))),
-                          onPressed: () {},
-                          child: const Text('Deliver here!')),
-                    )),
-              ],
-            );
-          } else if (state is LocationLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            return Center(
-              child: ElevatedButton(
-                  onPressed: () {}, child: Text(state.toString())),
-            );
-          }
-        },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        height: 250,
+        child: BlocBuilder<LocationCubit, LocationState>(
+          builder: (context, state) {
+            if (state is LocationLoaded) {
+              return GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                      target: LatLng(
+                          state.location.latitude, state.location.longitude),
+                      zoom: 15),
+                  myLocationEnabled: true,
+                  buildingsEnabled: true,
+                  zoomGesturesEnabled: false,
+                  tiltGesturesEnabled: false,
+                  mapType: MapType.normal,
+                  zoomControlsEnabled: true,
+                  myLocationButtonEnabled: true);
+            } else if (state is LocationLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return const Center(
+                child:CircularProgressIndicator()
+              );
+            }
+          },
+        ),
       ),
     );
   }

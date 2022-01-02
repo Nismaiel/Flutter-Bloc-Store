@@ -1,6 +1,6 @@
+import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
+import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:bruva/business_logic/orders/orders_bloc.dart';
-import 'package:bruva/data/web_services/payment_services.dart';
-import 'package:bruva/data/web_services/paypal_payment.dart';
 import 'package:bruva/presentation/screens/orders/shipping_address.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +14,9 @@ class OrderNowScreen extends StatefulWidget {
 }
 
 class _OrderNowScreenState extends State<OrderNowScreen> {
-  final _paymentKey =  GlobalKey();
+  final _paymentKey = GlobalKey();
   final _shippingKey = GlobalKey();
-bool triggerPaymentAlert=false;
-
-
+  bool triggerPaymentAlert = false;
 
   int? val = 0;
 
@@ -30,7 +28,6 @@ bool triggerPaymentAlert=false;
           paymentMethod(),
           shoppingBag(state),
           priceRecipt(state),
-
         ],
       ),
     );
@@ -63,10 +60,24 @@ bool triggerPaymentAlert=false;
   Widget shippingInfo() {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: GestureDetector(onTap: (){
-        Navigator.of(context).push(CupertinoPageRoute(builder: (context) =>const ShippingAddress(),));
-      },
-        child: Container(key: _shippingKey,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(CupertinoPageRoute(
+            builder: (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => LocationCubit(),
+                ),
+                BlocProvider(
+                  create: (context) => CheckoutCubit(),
+                ),
+              ],
+              child: const ShippingAddress(),
+            )
+          ));
+        },
+        child: Container(
+          key: _shippingKey,
           height: MediaQuery.of(context).size.height / 5,
           color: Colors.white,
           width: double.infinity,
@@ -90,15 +101,16 @@ bool triggerPaymentAlert=false;
   Widget paymentMethod() {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: Container(key: _paymentKey,
+      child: Container(
+        key: _paymentKey,
         color: Colors.white,
         width: double.infinity,
         height: MediaQuery.of(context).size.height / 4.5,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          const  Padding(
-              padding:  EdgeInsets.only(left: 12.0, top: 5),
+            const Padding(
+              padding: EdgeInsets.only(left: 12.0, top: 5),
               child: Text(
                 'payment method',
                 style: TextStyle(
@@ -117,40 +129,48 @@ bool triggerPaymentAlert=false;
                     });
                   }),
               const Icon(
-              Icons.credit_card,
-              color: Colors.purple,
-            ),
-              const Text(
-                ' pay with credit card',style: TextStyle(fontWeight: FontWeight.w600),
-                textAlign: TextAlign.left,
-              ),
-             ]
-
-            ),
-           const Divider(color: Colors.black26,),
-            Row(children: [
-              Radio<int>(
-                  value: 2,
-                  groupValue: val,
-                  onChanged: (value) {
-                    setState(() {
-                      val = value;
-                    });
-                  }),
-              const Icon(
-                Icons.money,
-                color: Colors.green,
+                Icons.credit_card,
+                color: Colors.purple,
               ),
               const Text(
-                ' pay on delivery',style: TextStyle(fontWeight: FontWeight.w600),
+                ' pay with credit card',
+                style: TextStyle(fontWeight: FontWeight.w600),
                 textAlign: TextAlign.left,
               ),
-
-            ],
-
+            ]),
+            const Divider(
+              color: Colors.black26,
             ),
-            const   Divider(color: Colors.black26,),
-            Visibility(visible: triggerPaymentAlert,child:Text('please select a peyment method',style: TextStyle(color: Colors.red),)),
+            Row(
+              children: [
+                Radio<int>(
+                    value: 2,
+                    groupValue: val,
+                    onChanged: (value) {
+                      setState(() {
+                        val = value;
+                      });
+                    }),
+                const Icon(
+                  Icons.money,
+                  color: Colors.green,
+                ),
+                const Text(
+                  ' pay on delivery',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
+            const Divider(
+              color: Colors.black26,
+            ),
+            Visibility(
+                visible: triggerPaymentAlert,
+                child: Text(
+                  'please select a peyment method',
+                  style: TextStyle(color: Colors.red),
+                )),
           ],
         ),
       ),
@@ -263,55 +283,97 @@ bool triggerPaymentAlert=false;
       ),
     );
   }
-Widget bottomNavigationBar(OrdersState state){
-    return Container(decoration: BoxDecoration(color: Colors.white,boxShadow: [BoxShadow(offset: Offset(1.5, 1.6),)],border: Border.all(color: Colors.black26)),
+
+  Widget bottomNavigationBar(OrdersState state) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(1.5, 1.6),
+            )
+          ],
+          border: Border.all(color: Colors.black26)),
       width: double.infinity,
-      height: MediaQuery.of(context).size.height / 9,
-      child: Column(mainAxisSize: MainAxisSize.min,children: [
-        Row(children: [
-          const   Text('Total:',style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18),),
-          Text(state.orders.total.toString(),style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18),)
-        ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(onPressed: (){
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              const Text(
+                'Total:',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+              ),
+              Text(
+                state.orders.total.toString(),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+              )
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                // PaymentService().requestPayment(state.orders.orderId.toString(), state.orders.total);
+                //
+                //  Navigator.of(context).push(   MaterialPageRoute(
+                //      builder: (BuildContext context) => PaypalPayment(
+                //        onFinish: (number) async {
+                //
+                //          // payment done
+                //          print('order id: '+number);
+                //
+                //        },
+                //      )));
 
-        // PaymentService().requestPayment(state.orders.orderId.toString(), state.orders.total);
-
-         Navigator.of(context).push(   MaterialPageRoute(
-             builder: (BuildContext context) => PaypalPayment(
-               onFinish: (number) async {
-
-                 // payment done
-                 print('order id: '+number);
-
-               },
-             )));
-
-
-            final targetContext=_paymentKey.currentContext;
-         if (targetContext!=null){Scrollable.ensureVisible(targetContext);}
-
-          }, child: const Text('PLACE ORDER',style: TextStyle(fontSize: 19,fontWeight: FontWeight.bold,color: Colors.white),),style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black),fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height/20))),),
-        )
-      ],),
+                final targetContext = _paymentKey.currentContext;
+                if (targetContext != null) {
+                  Scrollable.ensureVisible(targetContext);
+                }
+              },
+              child: const Text(
+                'PLACE ORDER',
+                style: TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.black),
+                  fixedSize: MaterialStateProperty.all(Size(
+                      MediaQuery.of(context).size.width,
+                      MediaQuery.of(context).size.height / 20))),
+            ),
+          )
+        ],
+      ),
     );
-}
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OrdersBloc,OrdersState>(builder:(context, state) {
-      if(state is OrdersLoaded){
-        return  Scaffold(
-          backgroundColor: Colors.white60,
-          appBar: appBar(),
-          body: confirmationBody(state),
-          bottomNavigationBar: bottomNavigationBar(state),
-        );
-      }else if (state is OrdersLoading) {
-        return const Center(child: CircularProgressIndicator());
-      } else {
-        return const SizedBox();
-      }
-    }, );
+    return BlocBuilder<OrdersBloc, OrdersState>(
+      builder: (context, state) {
+        if (state is OrdersLoaded) {
+          return Scaffold(
+            // backgroundColor: Colors.white60,
+            appBar: appBar(),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: confirmationBody(state),
+            ),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: bottomNavigationBar(state),
+            ),
+          );
+        } else if (state is OrdersLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
   }
 }
