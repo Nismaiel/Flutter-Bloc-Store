@@ -1,6 +1,7 @@
 
 
 import 'package:bruva/business_logic/location/location_bloc.dart';
+import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -97,7 +98,6 @@ class _ShippingAddressState extends State<ShippingAddress> {
 @override
   void initState() {
     // TODO: implement initState
-  BlocProvider.of<LocationBloc>(context).add(GetLocation());
   super.initState();
   }
   @override
@@ -111,7 +111,7 @@ class _ShippingAddressState extends State<ShippingAddress> {
           Padding(padding: EdgeInsets.only(top: 8.0),
             child: ElevatedButton(onPressed: () {
               Navigator.of(context).push(CupertinoPageRoute(
-                builder: (context) {return BlocProvider(create: (context) => LocationBloc(),child:const PickLocation(),);},));
+                builder: (context) {return BlocProvider(create: (context) => LocationCubit(),child:const PickLocation(),);},));
             }, child: Text('Pick Location')),),
         ],
       ),
