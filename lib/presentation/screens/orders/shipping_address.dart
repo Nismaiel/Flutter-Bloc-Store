@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
 import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,10 +32,10 @@ class _ShippingAddressState extends State<ShippingAddress> {
       'lastName': _lastName.text,
       'mobileNumber': _mobileNumber.text,
       'streetName': _streetName.text,
-      "buildingNumber": _building.text,
+      "building": _building.text,
       'floor': _floor.text,
       'apartment': _apartment.text,
-      'notes': _additionalNotes.text,
+      'additionalNotes': _additionalNotes.text,
     };
     String encodedMap = json.encode(shippingInfo);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -66,12 +67,13 @@ class _ShippingAddressState extends State<ShippingAddress> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextButton(
-              onPressed: _formKey.currentState!.validate()
-                  ? () async {
-                      await saveData();
-                      Navigator.pop(context);
-                    }
-                  : () {},
+              onPressed: () async {
+                if(_formKey.currentState!=null&&_formKey.currentState!.validate()){
+                await saveData();
+                context.read<CheckoutCubit>().getShippingData();
+                Navigator.pop(context);}else{}
+
+              },
               child: const Text(
                 'save',
                 style: TextStyle(
@@ -278,7 +280,6 @@ class _ShippingAddressState extends State<ShippingAddress> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      // backgroundColor: Colors.white60,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         child: SingleChildScrollView(

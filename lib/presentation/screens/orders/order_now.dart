@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:ui';
 
 import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
 import 'package:bruva/business_logic/location/location_cubit.dart';
@@ -7,7 +7,6 @@ import 'package:bruva/presentation/screens/orders/shipping_address.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderNowScreen extends StatefulWidget {
   const OrderNowScreen({Key? key}) : super(key: key);
@@ -20,14 +19,21 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
   final _paymentKey = GlobalKey();
   final _shippingKey = GlobalKey();
   bool triggerPaymentAlert = false;
-
   int? val = 0;
 
   Widget confirmationBody(OrdersState state) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          shippingInfo(),
+          BlocBuilder<CheckoutCubit, CheckoutState>(
+            builder: (context, state) {
+              if (state is AddedShippingData) {
+                return shippingInfo(state);
+              } else {
+                return addShippingInfo();
+              }
+            },
+          ),
           paymentMethod(),
           shoppingBag(state),
           priceRecipt(state),
@@ -35,16 +41,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
       ),
     );
   }
-  checkForShippingData()async{
-    SharedPreferences prefs=await SharedPreferences.getInstance();
-    String? shippingInfo=prefs.getString('shippingInfo');
-    return shippingInfo==null?json.decode(shippingInfo.toString()):Map();
-  }
-Widget dataView(){
-    return Column(children: [
-      Text(checkForShippingData().toString()),
-    ],);
-}
+
   PreferredSizeWidget appBar() {
     return AppBar(
       backgroundColor: Colors.white,
@@ -68,24 +65,24 @@ Widget dataView(){
       centerTitle: true,
     );
   }
-  Widget shippingInfo() {
+
+  Widget addShippingInfo() {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(CupertinoPageRoute(
-            builder: (context) => MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) => LocationCubit(),
-                ),
-                BlocProvider(
-                  create: (context) => CheckoutCubit(),
-                ),
-              ],
-              child:const ShippingAddress(),
-            )
-          ));
+              builder: (context) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => LocationCubit(),
+                      ),
+                      BlocProvider(
+                        create: (context) => CheckoutCubit(),
+                      ),
+                    ],
+                    child: const ShippingAddress(),
+                  )));
         },
         child: Container(
           key: _shippingKey,
@@ -93,7 +90,7 @@ Widget dataView(){
           color: Colors.white,
           width: double.infinity,
           alignment: Alignment.center,
-          child:checkForShippingData()!=0?dataView() : Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -105,6 +102,47 @@ Widget dataView(){
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget shippingInfo(AddedShippingData state) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 9,
+      color: Colors.white60,
+      width: double.infinity,
+      alignment: Alignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${state.firstName} ${state.lastName}',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+              Text(
+                state.mobileNumber,
+                style: TextStyle(fontSize: 18),
+              ),
+            ],
+          ),
+          Text('${state.building} ${state.streetName}',style: TextStyle(fontSize: 18),),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(' floor number ${state.floor}',style: const TextStyle(fontSize: 18),),
+              const SizedBox(width: 15,),
+              Text('apartment ${state.apartment}',style: const TextStyle(fontSize: 18),)
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -178,7 +216,7 @@ Widget dataView(){
             ),
             Visibility(
                 visible: triggerPaymentAlert,
-                child: Text(
+                child: const Text(
                   'please select a peyment method',
                   style: TextStyle(color: Colors.red),
                 )),
@@ -235,7 +273,7 @@ Widget dataView(){
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height / 4,
+        height: MediaQuery.of(context).size.height / 8,
         color: Colors.white,
         child: Column(
           children: [
@@ -299,7 +337,7 @@ Widget dataView(){
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               offset: Offset(1.5, 1.6),
             )
@@ -317,7 +355,8 @@ Widget dataView(){
               ),
               Text(
                 state.orders.total.toString(),
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -364,11 +403,12 @@ Widget dataView(){
 
   @override
   Widget build(BuildContext context) {
+    context.read<CheckoutCubit>().getShippingData();
+
     return BlocBuilder<OrdersBloc, OrdersState>(
       builder: (context, state) {
         if (state is OrdersLoaded) {
           return Scaffold(
-            // backgroundColor: Colors.white60,
             appBar: appBar(),
             body: Padding(
               padding: const EdgeInsets.all(8.0),
