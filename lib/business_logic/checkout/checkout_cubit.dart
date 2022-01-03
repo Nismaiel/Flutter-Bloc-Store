@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
-import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +7,6 @@ part 'checkout_state.dart';
 
 class CheckoutCubit extends Cubit<CheckoutState> {
   CheckoutCubit() : super(CheckoutInitial());
-
   getShippingData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('shippingInfo')) {
@@ -22,7 +19,17 @@ class CheckoutCubit extends Cubit<CheckoutState> {
           building: shippingInfo['building'],
           floor: shippingInfo['floor'],
           apartment: shippingInfo['apartment'],
-          streetName: shippingInfo['streetName']));
+          streetName: shippingInfo['streetName'],
+            lat: shippingInfo['lat'],
+        long: shippingInfo['long'],
+      ));
     }
   }
+  payOnline(){
+    emit(OnlinePayment());
+  }
+  payOnDelivery(){
+    emit(PayOnDelivery());
+  }
+
 }

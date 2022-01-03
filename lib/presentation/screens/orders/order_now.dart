@@ -28,7 +28,17 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
           BlocBuilder<CheckoutCubit, CheckoutState>(
             builder: (context, state) {
               if (state is AddedShippingData) {
-                return shippingInfo(state);
+             Map shippingInfoMap={
+                  "firstName": state.firstName,
+              'lastName': state.lastName,
+              'mobileNumber': state.mobileNumber,
+              'apartment': state.apartment,
+              'floor': state.floor,
+              'building': state.building,
+              'streetName': state.streetName,
+              'additionalNotes':state.additionalNotes
+              };
+                return shippingInfo(state,shippingInfoMap);
               } else {
                 return addShippingInfo();
               }
@@ -81,7 +91,9 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                         create: (context) => CheckoutCubit(),
                       ),
                     ],
-                    child: const ShippingAddress(),
+                    child: const ShippingAddress(
+                      addressInfo: {},
+                    ),
                   )));
         },
         child: Container(
@@ -106,43 +118,72 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
     );
   }
 
-  Widget shippingInfo(AddedShippingData state) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 9,
-      color: Colors.white60,
-      width: double.infinity,
-      alignment: Alignment.center,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${state.firstName} ${state.lastName}',
-                style:
-                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-              Text(
-                state.mobileNumber,
-                style: TextStyle(fontSize: 18),
-              ),
-            ],
-          ),
-          Text('${state.building} ${state.streetName}',style: TextStyle(fontSize: 18),),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(' floor number ${state.floor}',style: const TextStyle(fontSize: 18),),
-              const SizedBox(width: 15,),
-              Text('apartment ${state.apartment}',style: const TextStyle(fontSize: 18),)
-            ],
-          ),
-        ],
+  Widget shippingInfo(AddedShippingData state,Map shippingInfoMap) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(CupertinoPageRoute(
+            builder: (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => LocationCubit(),
+                    ),
+                    BlocProvider(
+                      create: (context) => CheckoutCubit(),
+                    ),
+                  ],
+                  child: ShippingAddress(
+                    addressInfo:shippingInfoMap ,
+                  ),
+                )));
+      },
+      child: Container(
+        height: MediaQuery.of(context).size.height / 9,
+        color: Colors.white60,
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${state.firstName} ${state.lastName}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700, fontSize: 18),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                Text(
+                  state.mobileNumber,
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+            Text(
+              '${state.building} ${state.streetName}',
+              style: TextStyle(fontSize: 18),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  ' floor number ${state.floor}',
+                  style: const TextStyle(fontSize: 18),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                Text(
+                  'apartment ${state.apartment}',
+                  style: const TextStyle(fontSize: 18),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -354,7 +395,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               ),
               Text(
-                state.orders.total.toString(),
+                (state.orders.total+50.0).toString(),
                 style:
                     const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               )

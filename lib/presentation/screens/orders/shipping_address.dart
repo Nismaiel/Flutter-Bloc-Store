@@ -9,13 +9,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'map.dart';
 
 class ShippingAddress extends StatefulWidget {
-  const ShippingAddress({Key? key}) : super(key: key);
+  final Map addressInfo;
+  const ShippingAddress({Key? key,required this.addressInfo}) : super(key: key);
 
   @override
   _ShippingAddressState createState() => _ShippingAddressState();
 }
 
 class _ShippingAddressState extends State<ShippingAddress> {
+
   final TextEditingController _firstName = TextEditingController();
   final TextEditingController _lastName = TextEditingController();
   final TextEditingController _mobileNumber = TextEditingController();
@@ -26,7 +28,24 @@ class _ShippingAddressState extends State<ShippingAddress> {
   final TextEditingController _additionalNotes = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+
+  handleControllers(){
+    if(widget.addressInfo.isNotEmpty){
+      _firstName.text=widget.addressInfo['firstName'];
+      _lastName.text=widget.addressInfo['lastName'];
+      _mobileNumber.text=widget.addressInfo['mobileNumber'];
+      _streetName.text=widget.addressInfo['streetName'];
+      _floor.text=widget.addressInfo['floor'];
+      _apartment.text=widget.addressInfo['apartment'];
+      _building.text=widget.addressInfo['building'];
+      _additionalNotes.text=widget.addressInfo['additionalNotes'];
+    }
+  }
+
   saveData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String lat=prefs.getString('lat').toString();
+    String long=prefs.getString('long').toString();
     Map shippingInfo = {
       'firstName': _firstName.text,
       'lastName': _lastName.text,
@@ -36,9 +55,11 @@ class _ShippingAddressState extends State<ShippingAddress> {
       'floor': _floor.text,
       'apartment': _apartment.text,
       'additionalNotes': _additionalNotes.text,
+      'lat':lat,
+      'long':long,
+
     };
     String encodedMap = json.encode(shippingInfo);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('shippingInfo', encodedMap);
   }
 
@@ -128,7 +149,6 @@ class _ShippingAddressState extends State<ShippingAddress> {
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black, width: 2)),
                   focusColor: Colors.black,
-                  // errorText: 'First Name should Contain 2-15 characters',
                   labelStyle: TextStyle(color: Colors.black45),
                   labelText: '*Last Name'),
             ),
@@ -274,10 +294,12 @@ class _ShippingAddressState extends State<ShippingAddress> {
     // TODO: implement initState
     context.read<LocationCubit>().getLoc();
     super.initState();
+   handleControllers();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: appBar(),
       body: Padding(
@@ -287,7 +309,8 @@ class _ShippingAddressState extends State<ShippingAddress> {
             key: _formKey,
             child: Column(
               children: [
-                personalInfoForm(),
+           personalInfoForm(),
+
                 PickLocation(),
                 address(),
                 const SizedBox(

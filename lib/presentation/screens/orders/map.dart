@@ -4,6 +4,7 @@ import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PickLocation extends StatelessWidget {
   PickLocation({Key? key}) : super(key: key);
@@ -13,9 +14,14 @@ class PickLocation extends StatelessWidget {
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
   }
-
+saveLoc(String lat,String long)async{
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    prefs.setString('lat', lat);
+    prefs.setString('long', long);
+}
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -23,6 +29,7 @@ class PickLocation extends StatelessWidget {
         child: BlocBuilder<LocationCubit, LocationState>(
           builder: (context, state) {
             if (state is LocationLoaded) {
+              saveLoc(state.location.latitude.toString(), state.location.longitude.toString());
               return GoogleMap(
                   onMapCreated: _onMapCreated,
                   initialCameraPosition: CameraPosition(

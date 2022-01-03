@@ -19,6 +19,9 @@ class AddedShippingData extends CheckoutState {
   final String floor;
   final String apartment;
   final String additionalNotes;
+  final String lat;
+  final String long;
+   String paymentOption;
 
   AddedShippingData(
       {required this.mobileNumber,
@@ -28,5 +31,11 @@ class AddedShippingData extends CheckoutState {
       required this.building,
       required this.floor,
       required this.apartment,
-      required this.streetName});
+      required this.streetName,
+      required this.lat,
+        required this.long,
+        this.paymentOption='cash',
+      });
 }
+class OnlinePayment extends CheckoutState{}
+class PayOnDelivery extends CheckoutState{}
