@@ -1,4 +1,5 @@
-const baseUrl='https://test-33476-default-rtdb.firebaseio.com/products.json';
+const productUrl='https://test-33476-default-rtdb.firebaseio.com/products.json';
+const ordersUrl='https://test-33476-default-rtdb.firebaseio.com/orders.json';
 const String register='/';
 const String addProduct='add_product';
 const String buyProducts='AllProducts';

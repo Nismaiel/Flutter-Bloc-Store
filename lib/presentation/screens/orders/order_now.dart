@@ -1,12 +1,13 @@
-import 'dart:ui';
-
 import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
 import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:bruva/business_logic/orders/orders_bloc.dart';
 import 'package:bruva/presentation/screens/orders/shipping_address.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../widgets.dart';
 
 class OrderNowScreen extends StatefulWidget {
   const OrderNowScreen({Key? key}) : super(key: key);
@@ -18,7 +19,6 @@ class OrderNowScreen extends StatefulWidget {
 class _OrderNowScreenState extends State<OrderNowScreen> {
   final _paymentKey = GlobalKey();
   final _shippingKey = GlobalKey();
-  bool triggerPaymentAlert = false;
   int? val = 0;
 
   Widget confirmationBody(OrdersState state) {
@@ -28,17 +28,21 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
           BlocBuilder<CheckoutCubit, CheckoutState>(
             builder: (context, state) {
               if (state is AddedShippingData) {
-             Map shippingInfoMap={
+                Map shippingInfoMap = {
                   "firstName": state.firstName,
-              'lastName': state.lastName,
-              'mobileNumber': state.mobileNumber,
-              'apartment': state.apartment,
-              'floor': state.floor,
-              'building': state.building,
-              'streetName': state.streetName,
-              'additionalNotes':state.additionalNotes
-              };
-                return shippingInfo(state,shippingInfoMap);
+                  'lastName': state.lastName,
+                  'mobileNumber': state.mobileNumber,
+                  'apartment': state.apartment,
+                  'floor': state.floor,
+                  'building': state.building,
+                  'streetName': state.streetName,
+                  'additionalNotes': state.additionalNotes
+                };
+                return shippingInfo(state, shippingInfoMap);
+              }else if(state is CheckOutLoading){
+              return  loading();
+              }else if(state is OrderPlaced){
+                return Center(child: Text('Done${state.orderNumber}'),);
               } else {
                 return addShippingInfo();
               }
@@ -82,7 +86,8 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(CupertinoPageRoute(
-              builder: (context) => MultiBlocProvider(
+              builder: (context) =>
+                  MultiBlocProvider(
                     providers: [
                       BlocProvider(
                         create: (context) => LocationCubit(),
@@ -98,7 +103,10 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
         },
         child: Container(
           key: _shippingKey,
-          height: MediaQuery.of(context).size.height / 5,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height / 5,
           color: Colors.white,
           width: double.infinity,
           alignment: Alignment.center,
@@ -118,11 +126,12 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
     );
   }
 
-  Widget shippingInfo(AddedShippingData state,Map shippingInfoMap) {
+  Widget shippingInfo(AddedShippingData state, Map shippingInfoMap) {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(CupertinoPageRoute(
-            builder: (context) => MultiBlocProvider(
+            builder: (context) =>
+                MultiBlocProvider(
                   providers: [
                     BlocProvider(
                       create: (context) => LocationCubit(),
@@ -132,12 +141,15 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                     ),
                   ],
                   child: ShippingAddress(
-                    addressInfo:shippingInfoMap ,
+                    addressInfo: shippingInfoMap,
                   ),
                 )));
       },
       child: Container(
-        height: MediaQuery.of(context).size.height / 9,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height / 9,
         color: Colors.white60,
         width: double.infinity,
         alignment: Alignment.center,
@@ -157,14 +169,14 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                   width: 15,
                 ),
                 Text(
-                  state.mobileNumber,
-                  style: TextStyle(fontSize: 18),
+                  state.mobileNumber.toString(),
+                  style: const TextStyle(fontSize: 18),
                 ),
               ],
             ),
             Text(
               '${state.building} ${state.streetName}',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -192,49 +204,29 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
-        key: _paymentKey,
-        color: Colors.white,
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height / 4.5,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 12.0, top: 5),
-              child: Text(
-                'payment method',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
+          key: _paymentKey,
+          color: Colors.white,
+          width: double.infinity,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height / 4.5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 12.0, top: 5),
+                child: Text(
+                  'payment method',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
               ),
-            ),
-            Row(children: [
-              Radio<int>(
-                  value: 1,
-                  groupValue: val,
-                  onChanged: (value) {
-                    setState(() {
-                      val = value;
-                    });
-                  }),
-              const Icon(
-                Icons.credit_card,
-                color: Colors.purple,
-              ),
-              const Text(
-                ' pay with credit card',
-                style: TextStyle(fontWeight: FontWeight.w600),
-                textAlign: TextAlign.left,
-              ),
-            ]),
-            const Divider(
-              color: Colors.black26,
-            ),
-            Row(
-              children: [
+              Row(children: [
                 Radio<int>(
-                    value: 2,
+                    value: 1,
                     groupValue: val,
                     onChanged: (value) {
                       setState(() {
@@ -242,28 +234,44 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                       });
                     }),
                 const Icon(
-                  Icons.money,
-                  color: Colors.green,
+                  Icons.credit_card,
+                  color: Colors.purple,
                 ),
                 const Text(
-                  ' pay on delivery',
+                  ' pay with credit card',
                   style: TextStyle(fontWeight: FontWeight.w600),
                   textAlign: TextAlign.left,
                 ),
-              ],
-            ),
-            const Divider(
-              color: Colors.black26,
-            ),
-            Visibility(
-                visible: triggerPaymentAlert,
-                child: const Text(
-                  'please select a peyment method',
-                  style: TextStyle(color: Colors.red),
-                )),
-          ],
-        ),
-      ),
+              ]),
+              const Divider(
+                color: Colors.black26,
+              ),
+              Row(
+                children: [
+                  Radio<int>(
+                      value: 2,
+                      groupValue: val,
+                      onChanged: (value) {
+                        setState(() {
+                          val = value;
+                        });
+                      }),
+                  const Icon(
+                    Icons.money,
+                    color: Colors.green,
+                  ),
+                  const Text(
+                    ' pay on delivery',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.left,
+                  ),
+                ],
+              ),
+              const Divider(
+                color: Colors.black26,
+              ),
+            ],
+          )),
     );
   }
 
@@ -273,7 +281,10 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
       child: Container(
         color: Colors.white,
         width: double.infinity,
-        height: MediaQuery.of(context).size.height / 5,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height / 5,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,7 +298,10 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
             ),
             SizedBox(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height / 7,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height / 7,
               child: ListView.builder(
                 itemCount: state.orders.products.length,
                 itemBuilder: (context, index) {
@@ -314,7 +328,10 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height / 8,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height / 8,
         color: Colors.white,
         child: Column(
           children: [
@@ -374,7 +391,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
     );
   }
 
-  Widget bottomNavigationBar(OrdersState state) {
+  Widget bottomNavigationBar(OrdersLoaded state) {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -395,9 +412,9 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               ),
               Text(
-                (state.orders.total+50.0).toString(),
+                (state.orders.total + 50.0).toString(),
                 style:
-                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -406,6 +423,24 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               onPressed: () {
+                if (val == 2 && BlocProvider
+                    .of<CheckoutCubit>(context)
+                    .state is AddedShippingData) {
+                  context.read<CheckoutCubit>().placeOrder(
+                      DateTime
+                          .now()
+                          .millisecondsSinceEpoch
+                          .toString(),
+                      state.orders.products,
+                      FirebaseAuth.instance.currentUser!.uid,
+                      false,
+                      state.orders.total.toString(),
+                      state.orders.total.toString(),
+                      state.orders.total.toString(),
+                      '50');
+                }
+
+
                 // PaymentService().requestPayment(state.orders.orderId.toString(), state.orders.total);
                 //
                 //  Navigator.of(context).push(   MaterialPageRoute(
@@ -433,8 +468,14 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black),
                   fixedSize: MaterialStateProperty.all(Size(
-                      MediaQuery.of(context).size.width,
-                      MediaQuery.of(context).size.height / 20))),
+                      MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      MediaQuery
+                          .of(context)
+                          .size
+                          .height / 20))),
             ),
           )
         ],

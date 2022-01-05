@@ -13,4 +13,14 @@ class Product{
     price=json['price'];
     image=json['image'];
   }
+
+  Map<String, dynamic> toJson() =>
+      {
+       'id':id,
+        'name':name,
+        'description':description,
+        'price':price,
+        'image':image,
+      };
+
 }

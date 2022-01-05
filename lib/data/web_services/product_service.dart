@@ -9,7 +9,7 @@ class ProductService {
 
   ProductService() {
     BaseOptions options = BaseOptions(
-      baseUrl: baseUrl,
+      baseUrl: productUrl,
       receiveTimeout: 20 * 1000,
       sendTimeout: 20 * 1000,
       receiveDataWhenStatusError: true,
@@ -26,13 +26,13 @@ class ProductService {
     return downloadUrl;
 
   }
-  Future<dynamic> addProduct(prod, ) async {
-    dio.post(baseUrl, data: json.encode(prod));
+  Future<dynamic> addProduct(prod ) async {
+    dio.post(productUrl, data: json.encode(prod));
   }
 
   Future getAllProducts() async {
     try {
-      var response = await dio.get(baseUrl);
+      var response = await dio.get(productUrl);
 
       return response.data;
     } catch (e) {

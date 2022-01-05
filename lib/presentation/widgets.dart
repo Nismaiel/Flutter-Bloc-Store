@@ -150,3 +150,7 @@ Widget backArrow(context) {
     ),
   );
 }
+
+Widget loading(){
+  return const Center(child: CircularProgressIndicator(),);
+}
