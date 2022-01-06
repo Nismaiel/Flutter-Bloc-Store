@@ -34,11 +34,7 @@ class _AllProductsState extends State<AllProducts> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    bloc!.close();
-    super.dispose();
-  }
+
 
   Widget? buildBlocWidget() {
     return BlocBuilder<ProductBloc, ProductState>(builder: (ctx, state) {
@@ -59,17 +55,11 @@ class _AllProductsState extends State<AllProducts> {
     });
   }
 
-  Widget buildLoadedListWidget(products) {
+  Widget buildLoadedListWidget(List<Product> products) {
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
+      child: SizedBox(height: MediaQuery.of(context).size.height,
+        child: buildProductGrid(products),));
 
-
-              buildProductGrid(products)
-
-        ],
-      ),
-    );
   }
 
   Widget buildProductGrid(List<Product> products) {
@@ -78,7 +68,7 @@ class _AllProductsState extends State<AllProducts> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount:  products.length,
         gridDelegate:
-     const   SliverGridDelegateWithFixedCrossAxisCount(
+        const   SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2),
         itemBuilder: (ctx, index) {
 
@@ -98,45 +88,45 @@ class _AllProductsState extends State<AllProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-
-  leading: IconButton(onPressed: (){
-    BlocProvider.of<AuthBloc>(context).add(SignOut());
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      Navigator.of(context).pushReplacement( MaterialPageRoute(builder: (context) =>const landing(),));
-    });
-  }, icon:const Icon(Icons.logout_outlined)),
-        actions: <Widget>[
-          Stack(
-            children: [
-
-              IconButton(
-                  icon:const Icon(
-                    Icons.shopping_cart,color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, cartPage);
-                  }),
-              BlocBuilder<CartBloc,CartState>(builder:(context, state) {
-                if(state.cartItems!=null&& state.cartItems.products.length!=0){
-                  return Text(state.cartItems.products.length.toString());}else {return SizedBox();}
-              }, )
-            ],
-          ),
-          IconButton(
-              icon:const Icon(
-                Icons.favorite,color: Colors.white,
-              ),
-              onPressed: () {
-              Navigator.pushNamed(context, favoritesPage);
-              }),
-        ],
-        title:  Text(
-          'Bruva',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.deepPurple,
-      ),
+      // appBar: AppBar(
+      //
+      //   leading: IconButton(onPressed: (){
+      //     BlocProvider.of<AuthBloc>(context).add(SignOut());
+      //     WidgetsBinding.instance!.addPostFrameCallback((_) {
+      //       Navigator.of(context).pushReplacement( MaterialPageRoute(builder: (context) =>const landing(),));
+      //     });
+      //   }, icon:const Icon(Icons.logout_outlined)),
+      //   actions: <Widget>[
+      //     Stack(
+      //       children: [
+      //
+      //         IconButton(
+      //             icon:const Icon(
+      //               Icons.shopping_cart,color: Colors.white,
+      //             ),
+      //             onPressed: () {
+      //               Navigator.pushNamed(context, cartPage);
+      //             }),
+      //         BlocBuilder<CartBloc,CartState>(builder:(context, state) {
+      //           if(state.cartItems!=null&& state.cartItems.products.length!=0){
+      //             return Text(state.cartItems.products.length.toString());}else {return SizedBox();}
+      //         }, )
+      //       ],
+      //     ),
+      //     IconButton(
+      //         icon:const Icon(
+      //           Icons.favorite,color: Colors.white,
+      //         ),
+      //         onPressed: () {
+      //           Navigator.pushNamed(context, favoritesPage);
+      //         }),
+      //   ],
+      //   title:  Text(
+      //     'Bruva',
+      //     style: TextStyle(color: Colors.white),
+      //   ),
+      //   backgroundColor: Colors.deepPurple,
+      // ),
       body: buildBlocWidget(),
     );
   }

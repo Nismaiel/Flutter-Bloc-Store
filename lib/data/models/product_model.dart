@@ -4,7 +4,7 @@ class Product{
   late String description;
   late String price;
   late String image;
-
+  // late String sellerId;
 
   Product.fromJson(Map<String,dynamic>json){
     id=json['id'];
@@ -12,6 +12,7 @@ class Product{
     description=json['description'];
     price=json['price'];
     image=json['image'];
+    // sellerId=json['sellerId'];
   }
 
   Map<String, dynamic> toJson() =>
@@ -21,6 +22,7 @@ class Product{
         'description':description,
         'price':price,
         'image':image,
+        // 'sellerId':sellerId,
       };
 
 }

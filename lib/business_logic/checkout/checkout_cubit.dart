@@ -67,7 +67,7 @@ class CheckoutCubit extends Cubit<CheckoutState> {
         http.Response res=await http.post(Uri.parse(ordersUrl), body: json.encode(order));
         debugPrint(res.body);
         if(res.statusCode==200){
-        emit(OrderPlaced(orderNumber: orderId));}else{
+        emit(OrderPlaced(orderNumber: orderId,userName: shippingInfo['firstName']));}else{
           getShippingData();
         }
       } catch (e) {

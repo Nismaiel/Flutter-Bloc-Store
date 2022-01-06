@@ -1,6 +1,7 @@
 import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
 import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:bruva/business_logic/orders/orders_bloc.dart';
+import 'package:bruva/presentation/screens/orders/SuccessfulOrder.dart';
 import 'package:bruva/presentation/screens/orders/shipping_address.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,10 +40,6 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                   'additionalNotes': state.additionalNotes
                 };
                 return shippingInfo(state, shippingInfoMap);
-              }else if(state is CheckOutLoading){
-              return  loading();
-              }else if(state is OrderPlaced){
-                return Center(child: Text('Done${state.orderNumber}'),);
               } else {
                 return addShippingInfo();
               }
@@ -487,26 +484,32 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
   Widget build(BuildContext context) {
     context.read<CheckoutCubit>().getShippingData();
 
-    return BlocBuilder<OrdersBloc, OrdersState>(
-      builder: (context, state) {
-        if (state is OrdersLoaded) {
-          return Scaffold(
-            appBar: appBar(),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: confirmationBody(state),
-            ),
-            bottomNavigationBar: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: bottomNavigationBar(state),
-            ),
-          );
-        } else if (state is OrdersLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else {
-          return const SizedBox();
-        }
-      },
-    );
+    return BlocBuilder<CheckoutCubit,CheckoutState>(builder:(context, state) {
+      if(state is OrderPlaced){
+        return SuccessfulOrder(orderNumber: state.orderNumber,userName: state.userName,);
+      }else if(state is OrdersLoading){
+        return loading();
+      }else{return BlocBuilder<OrdersBloc, OrdersState>(
+        builder: (context, state) {
+          if (state is OrdersLoaded) {
+            return Scaffold(
+              appBar: appBar(),
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: confirmationBody(state),
+              ),
+              bottomNavigationBar: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: bottomNavigationBar(state),
+              ),
+            );
+          } else if (state is OrdersLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return const SizedBox();
+          }
+        },
+      );}
+    },);
   }
 }

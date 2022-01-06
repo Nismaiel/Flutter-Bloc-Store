@@ -1,3 +1,7 @@
+import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
+import 'package:bruva/business_logic/products/product_bloc.dart';
+import 'package:bruva/data/repositories/products_repo.dart';
+import 'package:bruva/data/web_services/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,12 +31,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    ProductsRepo productsRepo=ProductsRepo(ProductService());
     return MultiBlocProvider(
       providers:[
         BlocProvider(create:(ctx)=>CartBloc()..add(StartCart())),
         BlocProvider(create:(ctx)=>FavoritesBloc()..add(StartFavorites())),
         BlocProvider(create: (context)=>OrdersBloc()..add(StartOrders())),
         BlocProvider(create: (context)=>AuthBloc()),
+        BlocProvider(create: (context)=>ProductBloc(ProductInitial(),productsRepo)),
+        BlocProvider(create: (context)=>CheckoutCubit()),
 
       ],
       child: MaterialApp(

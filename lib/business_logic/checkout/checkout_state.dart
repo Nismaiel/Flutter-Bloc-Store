@@ -37,7 +37,8 @@ class AddedShippingData extends CheckoutState {
 }
 class OrderPlaced extends CheckoutState{
   final String orderNumber;
-  OrderPlaced({required this.orderNumber});
+  final String userName;
+  OrderPlaced({required this.orderNumber,required this.userName});
 
 }
 class CheckOutLoading extends CheckoutState{}
