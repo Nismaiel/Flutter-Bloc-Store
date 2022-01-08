@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bruva/data/repositories/user_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 part 'auth_event.dart';
 
@@ -68,7 +69,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ? emit(AuthInitial())
           : emit(LoggedIn());
     } catch (e) {
-      print(e.toString());
+      debugPrint('error:${e.toString()}');
       emit(AuthError(e.toString()));
     }
   }

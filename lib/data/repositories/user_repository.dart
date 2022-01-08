@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart'as http;
 class UserRepository {
@@ -36,13 +37,15 @@ class UserRepository {
     }
   }
   Future<User?> signInWithGoogle() async {
-    final googleUser = await GoogleSignIn().signIn();
+    try{final googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
+    await googleUser!.authentication;
     final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
     await FirebaseAuth.instance.signInWithCredential(credential);
-    return FirebaseAuth.instance.currentUser;
+    return FirebaseAuth.instance.currentUser;}on FirebaseAuthException catch(e){
+      debugPrint(e.toString());
+    }
   }
 
 Future forgetPassword(String email)async{

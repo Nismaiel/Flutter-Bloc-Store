@@ -88,45 +88,45 @@ class _AllProductsState extends State<AllProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //
-      //   leading: IconButton(onPressed: (){
-      //     BlocProvider.of<AuthBloc>(context).add(SignOut());
-      //     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      //       Navigator.of(context).pushReplacement( MaterialPageRoute(builder: (context) =>const landing(),));
-      //     });
-      //   }, icon:const Icon(Icons.logout_outlined)),
-      //   actions: <Widget>[
-      //     Stack(
-      //       children: [
-      //
-      //         IconButton(
-      //             icon:const Icon(
-      //               Icons.shopping_cart,color: Colors.white,
-      //             ),
-      //             onPressed: () {
-      //               Navigator.pushNamed(context, cartPage);
-      //             }),
-      //         BlocBuilder<CartBloc,CartState>(builder:(context, state) {
-      //           if(state.cartItems!=null&& state.cartItems.products.length!=0){
-      //             return Text(state.cartItems.products.length.toString());}else {return SizedBox();}
-      //         }, )
-      //       ],
-      //     ),
-      //     IconButton(
-      //         icon:const Icon(
-      //           Icons.favorite,color: Colors.white,
-      //         ),
-      //         onPressed: () {
-      //           Navigator.pushNamed(context, favoritesPage);
-      //         }),
-      //   ],
-      //   title:  Text(
-      //     'Bruva',
-      //     style: TextStyle(color: Colors.white),
-      //   ),
-      //   backgroundColor: Colors.deepPurple,
-      // ),
+      appBar: AppBar(
+
+        leading: IconButton(onPressed: (){
+          BlocProvider.of<AuthBloc>(context).add(SignOut());
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            Navigator.of(context).pushReplacement( MaterialPageRoute(builder: (context) =>const landing(),));
+          });
+        }, icon:const Icon(Icons.logout_outlined)),
+        actions: <Widget>[
+          Stack(
+            children: [
+
+              IconButton(
+                  icon:const Icon(
+                    Icons.shopping_cart,color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, cartPage);
+                  }),
+              BlocBuilder<CartBloc,CartState>(builder:(context, state) {
+                if(state.cartItems!=null&& state.cartItems.products.length!=0){
+                  return Text(state.cartItems.products.length.toString());}else {return SizedBox();}
+              }, )
+            ],
+          ),
+          IconButton(
+              icon:const Icon(
+                Icons.favorite,color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, favoritesPage);
+              }),
+        ],
+        title:const  Text(
+          'Bruva',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.deepPurple,
+      ),
       body: buildBlocWidget(),
     );
   }
