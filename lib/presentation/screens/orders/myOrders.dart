@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:intl/intl.dart';
 import 'package:bruva/business_logic/myOrders/my_orders_cubit.dart';
 import 'package:bruva/presentation/screens/orders/myOrdersDetails.dart';
 import 'package:bruva/presentation/widgets.dart';
@@ -68,7 +67,7 @@ class _MyOrdersState extends State<MyOrders> {
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                state.myOrders[index].dateTime,
+                                DateFormat.yMMMd().format(DateTime.parse(state.myOrders[index].dateTime)),
                               )
                             ],
                           ),

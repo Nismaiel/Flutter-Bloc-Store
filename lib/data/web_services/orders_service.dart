@@ -1,32 +1,24 @@
-import 'dart:collection';
 import 'dart:convert';
 
-import 'package:bruva/consts/constants.dart';
 import 'package:bruva/data/models/myOrdersModel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart'as http;
-import 'package:dio/dio.dart';
-class OrdersService{
+import 'package:http/http.dart' as http;
 
- Future<List<MyOrdersModel>> getMyOrders()async{
-   late Dio dio;
+class OrdersService {
+  Future<List<MyOrdersModel>> getMyOrders() async {
+    final url =
+        'https://test-33476-default-rtdb.firebaseio.com/orders.json?orderBy="userId"&equalTo="${FirebaseAuth.instance.currentUser!.uid.toString()}"';
+    List<MyOrdersModel> myOrders = [];
+    try {
+      final response = await http.get(Uri.parse(url));
+      final data = json.decode(response.body);
 
-   BaseOptions options = BaseOptions(
-     baseUrl: productUrl,
-     receiveTimeout: 20 * 1000,
-     sendTimeout: 20 * 1000,
-     receiveDataWhenStatusError: true,
-   );
-   dio = Dio(options);
-
-   List<MyOrdersModel> myOrders=[];
-   try{
-     final response=await http.get(Uri.parse(ordersUrl));
-     final data=json.decode(response.body);
-
-     data.values.forEach((element) {myOrders.add(MyOrdersModel.fromJson(element));});
+      data.values.forEach((element) {
+        myOrders.add(MyOrdersModel.fromJson(element));
+      });
       return myOrders;
-    }catch(e){
+    } catch (e) {
       debugPrint(e.toString());
       return myOrders;
     }
