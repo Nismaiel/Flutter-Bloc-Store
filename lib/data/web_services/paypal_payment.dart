@@ -83,7 +83,7 @@
 //     ];
 //
 //
-//     // checkout invoice details
+//     // Order invoice details
 //     String totalAmount = '1.99';
 //     String subTotalAmount = '1.99';
 //     String shippingCost = '0';

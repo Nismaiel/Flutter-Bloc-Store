@@ -1,12 +1,11 @@
+import 'package:bruva/business_logic/Order/order_cubit.dart';
 import 'package:bruva/business_logic/cart/cart_bloc.dart';
-import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
-import 'package:bruva/business_logic/orders/orders_bloc.dart';
-import 'package:bruva/presentation/screens/orders/order_now.dart';
+import 'package:bruva/business_logic/checkout/checkOut_bloc.dart';
+import 'package:bruva/presentation/screens/checkout/order_now.dart';
 import 'package:bruva/presentation/screens/product/product_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'cart_item.dart';
 
 class CartScreen extends StatefulWidget {
@@ -54,7 +53,7 @@ class _CartScreenState extends State<CartScreen> {
                         onPressed: state.cartItems.products.isEmpty
                             ? () {}
                             : () {
-                                BlocProvider.of<OrdersBloc>(context).add(
+                                BlocProvider.of<CheckOutBloc>(context).add(
                                     AddOrder(
                                         products: state.cartItems.products,
                                         cartTotal: state.cartItems.total,
@@ -64,7 +63,7 @@ class _CartScreenState extends State<CartScreen> {
                                     context,
                                     CupertinoPageRoute(
                                         builder: (_) => BlocProvider(
-                                            create: (context) => CheckoutCubit(),
+                                            create: (context) => OrderCubit(),
                                             child: const OrderNowScreen())));
                               },
                       )

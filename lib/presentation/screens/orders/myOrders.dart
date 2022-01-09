@@ -29,7 +29,7 @@ class _MyOrdersState extends State<MyOrders> {
             if (state is MyOrdersLoaded) {
               return state.myOrders.isEmpty
                   ? const Center(
-                child: Text('you have no orders yet'),
+                child: Text('you have no checkout yet'),
               )
                   : ListView.builder(
                 itemCount: state.myOrders.length,

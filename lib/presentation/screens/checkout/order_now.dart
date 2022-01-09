@@ -1,14 +1,13 @@
-import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
+import 'package:bruva/business_logic/Order/order_cubit.dart';
 import 'package:bruva/business_logic/location/location_cubit.dart';
-import 'package:bruva/business_logic/orders/orders_bloc.dart';
-import 'package:bruva/presentation/screens/orders/SuccessfulOrder.dart';
-import 'package:bruva/presentation/screens/orders/shipping_address.dart';
+import 'package:bruva/business_logic/checkout/checkOut_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../widgets.dart';
+import 'SuccessfulOrder.dart';
+import 'shipping_address.dart';
 
 class OrderNowScreen extends StatefulWidget {
   const OrderNowScreen({Key? key}) : super(key: key);
@@ -26,7 +25,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BlocBuilder<CheckoutCubit, CheckoutState>(
+          BlocBuilder<OrderCubit, orderState>(
             builder: (context, state) {
               if (state is AddedShippingData) {
                 Map shippingInfoMap = {
@@ -69,7 +68,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
       title: const Padding(
         padding: EdgeInsets.all(8.0),
         child: Text(
-          'checkout',
+          'Order',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
         ),
       ),
@@ -90,7 +89,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                         create: (context) => LocationCubit(),
                       ),
                       BlocProvider(
-                        create: (context) => CheckoutCubit(),
+                        create: (context) => OrderCubit(),
                       ),
                     ],
                     child: const ShippingAddress(
@@ -134,7 +133,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                       create: (context) => LocationCubit(),
                     ),
                     BlocProvider(
-                      create: (context) => CheckoutCubit(),
+                      create: (context) => OrderCubit(),
                     ),
                   ],
                   child: ShippingAddress(
@@ -388,7 +387,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
     );
   }
 
-  Widget bottomNavigationBar(OrdersLoaded state) {
+  Widget bottomNavigationBar(CheckOutLoaded state) {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -421,9 +420,9 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
             child: ElevatedButton(
               onPressed: () {
                 if (val == 2 && BlocProvider
-                    .of<CheckoutCubit>(context)
+                    .of<OrderCubit>(context)
                     .state is AddedShippingData) {
-                  context.read<CheckoutCubit>().placeOrder(
+                  context.read<OrderCubit>().placeOrder(
                       DateTime
                           .now()
                           .millisecondsSinceEpoch
@@ -482,16 +481,16 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<CheckoutCubit>().getShippingData();
+    context.read<OrderCubit>().getShippingData();
 
-    return BlocBuilder<CheckoutCubit,CheckoutState>(builder:(context, state) {
+    return BlocBuilder<OrderCubit,orderState>(builder:(context, state) {
       if(state is OrderPlaced){
         return SuccessfulOrder(orderNumber: state.orderNumber,userName: state.userName,);
-      }else if(state is OrdersLoading){
+      }else if(state is CheckOutLoading){
         return loading();
-      }else{return BlocBuilder<OrdersBloc, OrdersState>(
+      }else{return BlocBuilder<CheckOutBloc, OrdersState>(
         builder: (context, state) {
-          if (state is OrdersLoaded) {
+          if (state is CheckOutLoaded) {
             return Scaffold(
               appBar: appBar(),
               body: Padding(
@@ -503,7 +502,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                 child: bottomNavigationBar(state),
               ),
             );
-          } else if (state is OrdersLoading) {
+          } else if (state is CheckOutLoading) {
             return const Center(child: CircularProgressIndicator());
           } else {
             return const SizedBox();

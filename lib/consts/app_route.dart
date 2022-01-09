@@ -6,7 +6,6 @@ import 'package:bruva/data/web_services/product_service.dart';
 import 'package:bruva/presentation/screens/auth/landing.dart';
 import 'package:bruva/presentation/screens/cart/cart_screen.dart';
 import 'package:bruva/presentation/screens/favorites/favoritest_screen.dart';
-import 'package:bruva/presentation/screens/home/homePage.dart';
 import 'package:bruva/presentation/screens/product/add_product.dart';
 import 'package:bruva/presentation/screens/product/buy_products.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,7 +41,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) {
           return BlocProvider(
               create: (ctx) => ProductBloc( ProductInitial(),productsRepo),
-              child: const HomePage());
+              child: const AllProducts());
         });
 
       case favoritesPage:

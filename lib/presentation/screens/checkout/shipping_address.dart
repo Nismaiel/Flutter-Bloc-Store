@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
+import 'package:bruva/business_logic/Order/order_cubit.dart';
 import 'package:bruva/business_logic/location/location_cubit.dart';
+import 'package:bruva/presentation/screens/orders/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'map.dart';
 
 class ShippingAddress extends StatefulWidget {
   final Map addressInfo;
@@ -91,7 +91,7 @@ class _ShippingAddressState extends State<ShippingAddress> {
               onPressed: () async {
                 if(_formKey.currentState!=null&&_formKey.currentState!.validate()){
                 await saveData();
-                context.read<CheckoutCubit>().getShippingData();
+                context.read<OrderCubit>().getShippingData();
                 Navigator.pop(context);}else{}
 
               },

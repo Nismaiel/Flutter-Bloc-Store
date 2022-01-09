@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class OrdersService {
   Future<List<MyOrdersModel>> getMyOrders() async {
     final url =
-        'https://test-33476-default-rtdb.firebaseio.com/orders.json?orderBy="userId"&equalTo="${FirebaseAuth.instance.currentUser!.uid.toString()}"';
+        'https://test-33476-default-rtdb.firebaseio.com/checkout.json?orderBy="userId"&equalTo="${FirebaseAuth.instance.currentUser!.uid.toString()}"';
     List<MyOrdersModel> myOrders = [];
     try {
       final response = await http.get(Uri.parse(url));

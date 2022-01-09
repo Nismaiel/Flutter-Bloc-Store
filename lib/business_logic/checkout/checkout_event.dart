@@ -1,13 +1,13 @@
-part of 'orders_bloc.dart';
+part of 'checkOut_bloc.dart';
 
-abstract class OrdersEvent extends Equatable {
-  const OrdersEvent();
+abstract class CheckoutEvent extends Equatable {
+  const CheckoutEvent();
   @override
   List<Object>get props=>[];
 }
-class StartOrders extends OrdersEvent{}
+class StartOrders extends CheckoutEvent{}
 
-class AddOrder extends OrdersEvent{
+class AddOrder extends CheckoutEvent{
   final int orderId;
   final double cartTotal;
   final List<Product> products;
@@ -17,7 +17,7 @@ class AddOrder extends OrdersEvent{
 }
 
 
-class RemoveOrder extends OrdersEvent{
+class RemoveOrder extends CheckoutEvent{
   final Orders orders;
   const RemoveOrder({required this.orders});
 
