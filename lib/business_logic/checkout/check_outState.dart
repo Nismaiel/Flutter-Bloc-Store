@@ -1,12 +1,12 @@
 part of 'checkOut_bloc.dart';
 
-abstract class OrdersState extends Equatable {
-  const OrdersState();
+abstract class CheckoutState extends Equatable {
+  const CheckoutState();
 
 get orders=>null;
 }
 
-class CheckOutState extends OrdersState {
+class CheckOutState extends CheckoutState {
   @override
   List<Object> get props => [];
 }

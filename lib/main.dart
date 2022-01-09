@@ -5,7 +5,8 @@ import 'package:bruva/data/web_services/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'business_logic/Order/order_cubit.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'business_logic/Order/checkout_cubit.dart';
 import 'business_logic/auth/auth_bloc.dart';
 import 'business_logic/cart/cart_bloc.dart';
 import 'business_logic/favorites/favorites_bloc.dart';
@@ -30,6 +31,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
+
+
   @override
   Widget build(BuildContext context) {
     ProductsRepo productsRepo=ProductsRepo(ProductService());
@@ -40,7 +43,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context)=>CheckOutBloc()..add(StartOrders())),
         BlocProvider(create: (context)=>AuthBloc()),
         BlocProvider(create: (context)=>ProductBloc(ProductInitial(),productsRepo)),
-        BlocProvider(create: (context)=>OrderCubit()),
+        BlocProvider(create: (context)=>checkoutCubit()),
         BlocProvider(create: (context)=>MyOrdersCubit()),
 
       ],

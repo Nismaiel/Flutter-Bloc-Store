@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:bruva/business_logic/Order/order_cubit.dart';
+import 'package:bruva/business_logic/Order/checkout_cubit.dart';
 import 'package:bruva/business_logic/location/location_cubit.dart';
-import 'package:bruva/presentation/screens/orders/map.dart';
+import 'package:bruva/presentation/screens/checkout/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -89,11 +89,11 @@ class _ShippingAddressState extends State<ShippingAddress> {
           padding: const EdgeInsets.all(8.0),
           child: TextButton(
               onPressed: () async {
-                if(_formKey.currentState!=null&&_formKey.currentState!.validate()){
-                await saveData();
-                context.read<OrderCubit>().getShippingData();
-                Navigator.pop(context);}else{}
 
+    if(_formKey.currentState!=null&&_formKey.currentState!.validate()){
+    await saveData();
+    context.read<checkoutCubit>().getShippingData();
+    Navigator.pop(context);}else{}
               },
               child: const Text(
                 'save',
@@ -291,7 +291,6 @@ class _ShippingAddressState extends State<ShippingAddress> {
 
   @override
   void initState() {
-    // TODO: implement initState
     context.read<LocationCubit>().getLoc();
     super.initState();
    handleControllers();

@@ -1,4 +1,4 @@
-import 'package:bruva/business_logic/Order/order_cubit.dart';
+import 'package:bruva/business_logic/Order/checkout_cubit.dart';
 import 'package:bruva/business_logic/cart/cart_bloc.dart';
 import 'package:bruva/business_logic/checkout/checkOut_bloc.dart';
 import 'package:bruva/presentation/screens/checkout/order_now.dart';
@@ -63,7 +63,7 @@ class _CartScreenState extends State<CartScreen> {
                                     context,
                                     CupertinoPageRoute(
                                         builder: (_) => BlocProvider(
-                                            create: (context) => OrderCubit(),
+                                            create: (context) => checkoutCubit(),
                                             child: const OrderNowScreen())));
                               },
                       )

@@ -1,16 +1,16 @@
-part of 'order_cubit.dart';
+part of 'checkout_cubit.dart';
 
-abstract class orderState {}
+abstract class checkOutCubitState {}
 
-class orderInitial extends orderState {}
+class checkoutCubitInitial extends checkOutCubitState {}
 
-class LocationAdded extends orderState {
+class LocationAdded extends checkOutCubitState {
   final Position location;
 
   LocationAdded({required this.location});
 }
 
-class AddedShippingData extends orderState {
+class AddedShippingData extends checkOutCubitState {
   final String firstName;
   final String lastName;
   final String mobileNumber;
@@ -35,10 +35,10 @@ class AddedShippingData extends orderState {
         required this.long,
       });
 }
-class OrderPlaced extends orderState{
+class OrderPlaced extends checkOutCubitState{
   final String orderNumber;
   final String userName;
   OrderPlaced({required this.orderNumber,required this.userName});
 
 }
-class OrderLoading extends orderState{}
+class CheckoutCubitLoading extends checkOutCubitState{}

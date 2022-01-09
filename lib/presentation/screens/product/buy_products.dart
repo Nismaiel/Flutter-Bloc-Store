@@ -5,6 +5,7 @@ import 'package:bruva/business_logic/favorites/favorites_bloc.dart';
 import 'package:bruva/business_logic/products/product_bloc.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:bruva/presentation/screens/auth/landing.dart';
+import 'package:bruva/presentation/screens/orders/myOrders.dart';
 import 'package:bruva/presentation/screens/product/product_info.dart';
 import 'package:bruva/presentation/screens/product/product_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +23,7 @@ class AllProducts extends StatefulWidget {
 
 class _AllProductsState extends State<AllProducts> {
   Bloc? bloc;
+
   @override
   void initState() {
     BlocProvider.of<FavoritesBloc>(context);
@@ -33,7 +35,6 @@ class _AllProductsState extends State<AllProducts> {
 
     super.initState();
   }
-
 
 
   Widget? buildBlocWidget() {
@@ -57,28 +58,30 @@ class _AllProductsState extends State<AllProducts> {
 
   Widget buildLoadedListWidget(List<Product> products) {
     return SingleChildScrollView(
-      child: SizedBox(height: MediaQuery.of(context).size.height,
-        child: buildProductGrid(products),));
-
+        child: SizedBox(height: MediaQuery
+            .of(context)
+            .size
+            .height,
+          child: buildProductGrid(products),));
   }
 
   Widget buildProductGrid(List<Product> products) {
-    return  GridView.builder(
+    return GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount:  products.length,
+        itemCount: products.length,
         gridDelegate:
-        const   SliverGridDelegateWithFixedCrossAxisCount(
+        const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2),
         itemBuilder: (ctx, index) {
-
           return GestureDetector(
             onTap: () {
-              Navigator.of(context).push(CupertinoPageRoute(builder: (ctx)=>ProductInfo(product: products[index])));
+              Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (ctx) => ProductInfo(product: products[index])));
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child:ProductItem(product: products[index]),
+              child: ProductItem(product: products[index]),
             ),
           );
         });
@@ -90,38 +93,46 @@ class _AllProductsState extends State<AllProducts> {
     return Scaffold(
       appBar: AppBar(
 
-        leading: IconButton(onPressed: (){
+        leading: IconButton(onPressed: () {
           BlocProvider.of<AuthBloc>(context).add(SignOut());
           WidgetsBinding.instance!.addPostFrameCallback((_) {
-            Navigator.of(context).pushReplacement( MaterialPageRoute(builder: (context) =>const landing(),));
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const landing(),));
           });
-        }, icon:const Icon(Icons.logout_outlined)),
+        }, icon: const Icon(Icons.logout_outlined)),
         actions: <Widget>[
+          IconButton(onPressed: () {
+            Navigator.of(context).push(
+                CupertinoPageRoute(builder: (context) => const MyOrders(),));
+          }, icon:const Icon(Icons.history)),
           Stack(
             children: [
-
               IconButton(
-                  icon:const Icon(
-                    Icons.shopping_cart,color: Colors.white,
+                  icon: const Icon(
+                    Icons.shopping_cart, color: Colors.white,
                   ),
                   onPressed: () {
                     Navigator.pushNamed(context, cartPage);
                   }),
-              BlocBuilder<CartBloc,CartState>(builder:(context, state) {
-                if(state.cartItems!=null&& state.cartItems.products.length!=0){
-                  return Text(state.cartItems.products.length.toString());}else {return SizedBox();}
-              }, )
+              BlocBuilder<CartBloc, CartState>(builder: (context, state) {
+                if (state.cartItems != null &&
+                    state.cartItems.products.length != 0) {
+                  return Text(state.cartItems.products.length.toString());
+                } else {
+                  return const SizedBox();
+                }
+              },)
             ],
           ),
           IconButton(
-              icon:const Icon(
-                Icons.favorite,color: Colors.white,
+              icon: const Icon(
+                Icons.favorite, color: Colors.white,
               ),
               onPressed: () {
                 Navigator.pushNamed(context, favoritesPage);
               }),
         ],
-        title:const  Text(
+        title: const Text(
           'Bruva',
           style: TextStyle(color: Colors.white),
         ),

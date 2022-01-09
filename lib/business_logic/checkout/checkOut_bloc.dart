@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:bruva/business_logic/Order/order_cubit.dart';
+import 'package:bruva/business_logic/Order/checkout_cubit.dart';
 import 'package:bruva/data/models/orders_model.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:equatable/equatable.dart';
@@ -9,7 +9,7 @@ part 'checkout_event.dart';
 
 part 'check_outState.dart';
 
-class CheckOutBloc extends Bloc<CheckoutEvent, OrdersState> {
+class CheckOutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   CheckOutBloc() : super(CheckOutState()) {
     on<CheckoutEvent>((event, emit) async {
       if(event is StartOrders){
@@ -33,7 +33,7 @@ class CheckOutBloc extends Bloc<CheckoutEvent, OrdersState> {
     }
   }
 
-  _mapAddOrder(AddOrder event,OrdersState state)async{
+  _mapAddOrder(AddOrder event,CheckoutState state)async{
     try{
       emit(CheckOutLoaded(orders: Orders(products: event.products,total:event.cartTotal,orderId: event.orderId )));
     }catch(e){
@@ -41,7 +41,7 @@ class CheckOutBloc extends Bloc<CheckoutEvent, OrdersState> {
     }
   }
 
-  _mapRemoveOrder(RemoveOrder event,OrdersState state)async{
+  _mapRemoveOrder(RemoveOrder event,CheckoutState state)async{
     try{
       emit(CheckOutLoaded(orders: Orders(total: state.orders.total,orderId: state.orders.orderId,products: state.orders.products)));
 

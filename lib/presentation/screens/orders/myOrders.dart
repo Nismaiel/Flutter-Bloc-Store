@@ -23,13 +23,12 @@ class _MyOrdersState extends State<MyOrders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar: AppBar(backgroundColor: Colors.black,title:const Text('ordering history'),),
-        backgroundColor: Colors.white60,
         body: BlocBuilder<MyOrdersCubit, MyOrdersState>(
           builder: (context, state) {
             if (state is MyOrdersLoaded) {
               return state.myOrders.isEmpty
                   ? const Center(
-                child: Text('you have no checkout yet'),
+                child: Text('you have not bought anything yet'),
               )
                   : ListView.builder(
                 itemCount: state.myOrders.length,

@@ -9,10 +9,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'orderState.dart';
+part 'checkoutCubitState.dart';
 
-class OrderCubit extends Cubit<orderState> {
-  OrderCubit() : super(orderInitial());
+class checkoutCubit extends Cubit<checkOutCubitState> {
+  checkoutCubit() : super(checkoutCubitInitial());
 
   getShippingData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -64,7 +64,7 @@ class OrderCubit extends Cubit<orderState> {
           'retailPrice': retailPrice,
           'shippingFee': shippingFee,
         };
-        emit(OrderLoading());
+        emit(CheckoutCubitLoading());
         http.Response res=await http.post(Uri.parse(ordersUrl), body: json.encode(order));
         debugPrint(res.body);
         if(res.statusCode==200){

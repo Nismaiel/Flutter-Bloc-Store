@@ -42,8 +42,8 @@ Widget favoritesButtonInfo(Product product) {
 Widget favoritesButton(Product product) {
   return BlocBuilder<FavoritesBloc, FavoritesState>(
     builder: (context, state) {
-      if (state.favorites!.products != null &&
-          state.favorites!.products.contains(product)) {
+      if (state.favorites.products != null &&
+          state.favorites.products.contains(product)) {
         return IconButton(
           onPressed: () {
             BlocProvider.of<FavoritesBloc>(context)

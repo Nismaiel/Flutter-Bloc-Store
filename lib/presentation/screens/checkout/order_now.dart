@@ -1,13 +1,15 @@
-import 'package:bruva/business_logic/Order/order_cubit.dart';
+import 'package:bruva/business_logic/Order/checkout_cubit.dart';
 import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:bruva/business_logic/checkout/checkOut_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../widgets.dart';
 import 'SuccessfulOrder.dart';
 import 'shipping_address.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class OrderNowScreen extends StatefulWidget {
   const OrderNowScreen({Key? key}) : super(key: key);
@@ -20,12 +22,25 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
   final _paymentKey = GlobalKey();
   final _shippingKey = GlobalKey();
   int? val = 0;
+  checkPermissionLocation() async{
+    var locationStatus = await Permission.location.status;
 
-  Widget confirmationBody(OrdersState state) {
+
+    if (!locationStatus.isGranted){
+      await Permission.location.request();}
+  }
+
+  @override
+  void initState(){
+    checkPermissionLocation();
+    super.initState();
+  }
+
+  Widget confirmationBody(CheckoutState state) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BlocBuilder<OrderCubit, orderState>(
+          BlocBuilder<checkoutCubit, checkOutCubitState>(
             builder: (context, state) {
               if (state is AddedShippingData) {
                 Map shippingInfoMap = {
@@ -80,22 +95,28 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(CupertinoPageRoute(
-              builder: (context) =>
-                  MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => LocationCubit(),
+        onTap: ()async {
+          var locationStatus = await Permission.location.status;
+
+
+          if (!locationStatus.isGranted){
+            await Permission.location.request();}else if(locationStatus.isGranted){
+            Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) =>
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) => LocationCubit(),
+                        ),
+                        BlocProvider(
+                          create: (context) => checkoutCubit(),
+                        ),
+                      ],
+                      child: const ShippingAddress(
+                        addressInfo: {},
                       ),
-                      BlocProvider(
-                        create: (context) => OrderCubit(),
-                      ),
-                    ],
-                    child: const ShippingAddress(
-                      addressInfo: {},
-                    ),
-                  )));
+                    )));}
+
         },
         child: Container(
           key: _shippingKey,
@@ -133,7 +154,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                       create: (context) => LocationCubit(),
                     ),
                     BlocProvider(
-                      create: (context) => OrderCubit(),
+                      create: (context) => checkoutCubit(),
                     ),
                   ],
                   child: ShippingAddress(
@@ -420,9 +441,9 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
             child: ElevatedButton(
               onPressed: () {
                 if (val == 2 && BlocProvider
-                    .of<OrderCubit>(context)
+                    .of<checkoutCubit>(context)
                     .state is AddedShippingData) {
-                  context.read<OrderCubit>().placeOrder(
+                  context.read<checkoutCubit>().placeOrder(
                       DateTime
                           .now()
                           .millisecondsSinceEpoch
@@ -481,14 +502,14 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<OrderCubit>().getShippingData();
+    context.read<checkoutCubit>().getShippingData();
 
-    return BlocBuilder<OrderCubit,orderState>(builder:(context, state) {
+    return BlocBuilder<checkoutCubit,checkOutCubitState>(builder:(context, state) {
       if(state is OrderPlaced){
         return SuccessfulOrder(orderNumber: state.orderNumber,userName: state.userName,);
       }else if(state is CheckOutLoading){
         return loading();
-      }else{return BlocBuilder<CheckOutBloc, OrdersState>(
+      }else{return BlocBuilder<CheckOutBloc, CheckoutState>(
         builder: (context, state) {
           if (state is CheckOutLoaded) {
             return Scaffold(
@@ -503,7 +524,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
               ),
             );
           } else if (state is CheckOutLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return  loading();
           } else {
             return const SizedBox();
           }
