@@ -1,4 +1,5 @@
 import 'package:bruva/business_logic/checkout/checkout_cubit.dart';
+import 'package:bruva/business_logic/myOrders/my_orders_cubit.dart';
 import 'package:bruva/business_logic/products/product_bloc.dart';
 import 'package:bruva/data/repositories/products_repo.dart';
 import 'package:bruva/data/web_services/product_service.dart';
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context)=>AuthBloc()),
         BlocProvider(create: (context)=>ProductBloc(ProductInitial(),productsRepo)),
         BlocProvider(create: (context)=>CheckoutCubit()),
+        BlocProvider(create: (context)=>MyOrdersCubit()),
 
       ],
       child: MaterialApp(

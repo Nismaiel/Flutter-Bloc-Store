@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:bruva/consts/constants.dart';
+import 'package:bruva/data/models/myOrdersModel.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
@@ -50,7 +51,8 @@ class CheckoutCubit extends Cubit<CheckoutState> {
       try {
         List prodList=[];
         for (var element in products) {prodList.add(element.toJson());}
-        Map order = {
+
+        var order = {
           'orderId': orderId,
           'userId': userId,
           'dateTime': DateTime.now().toString(),
@@ -62,7 +64,6 @@ class CheckoutCubit extends Cubit<CheckoutState> {
           'retailPrice': retailPrice,
           'shippingFee': shippingFee,
         };
-        print(order);
         emit(CheckOutLoading());
         http.Response res=await http.post(Uri.parse(ordersUrl), body: json.encode(order));
         debugPrint(res.body);
