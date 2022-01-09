@@ -1,4 +1,6 @@
 
+import 'package:bruva/data/models/product_model.dart';
+
 class MyOrdersModel{
     late String orderId;
     late String dateTime;
