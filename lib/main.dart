@@ -5,7 +5,6 @@ import 'package:bruva/data/web_services/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'business_logic/Order/checkout_cubit.dart';
 import 'business_logic/auth/auth_bloc.dart';
 import 'business_logic/cart/cart_bloc.dart';

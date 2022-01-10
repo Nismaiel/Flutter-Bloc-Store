@@ -1,3 +1,4 @@
+
 import 'package:bruva/business_logic/Order/checkout_cubit.dart';
 import 'package:bruva/business_logic/location/location_cubit.dart';
 import 'package:bruva/business_logic/checkout/checkOut_bloc.dart';
@@ -5,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
+
 import '../../widgets.dart';
 import 'SuccessfulOrder.dart';
 import 'shipping_address.dart';
@@ -22,6 +23,10 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
   final _paymentKey = GlobalKey();
   final _shippingKey = GlobalKey();
   int? val = 0;
+
+
+
+
   checkPermissionLocation() async{
     var locationStatus = await Permission.location.status;
 
@@ -61,6 +66,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
           ),
           paymentMethod(),
           shoppingBag(state),
+
           priceRecipt(state),
         ],
       ),

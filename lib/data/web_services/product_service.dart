@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bruva/consts/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:dio/dio.dart';
-import 'package:http/http.dart'as http;
+import 'dart:io' as io;
 class ProductService {
   late Dio dio;
 
@@ -26,7 +26,17 @@ class ProductService {
     return downloadUrl;
 
   }
-  Future<dynamic> addProduct(prod ) async {
+  Future<dynamic> addProduct(File image,String name,String price,String description ) async {
+    final imageUrl = await uploadFile(
+        DateTime.now().millisecondsSinceEpoch, io.File(image.path));
+    Map<String, dynamic> prod = {
+      'id': DateTime.now().millisecondsSinceEpoch,
+      'name': name,
+      'price': price,
+      'description':description,
+      'image': imageUrl
+
+    };
     dio.post(productUrl, data: json.encode(prod));
   }
 
