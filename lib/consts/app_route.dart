@@ -28,21 +28,21 @@ class AppRouter {
       return MaterialPageRoute(builder: (context) {
         return BlocProvider(create: (context) => AuthBloc(),child: const landing(),);
       },);
-
-      case addProduct:
-        return CupertinoPageRoute(builder: (_) {
-          return BlocProvider(
-            create: (ctx) => ProductBloc( ProductInitial(),productsRepo),
-            child: const AddProduct(),
-          );
-        });
+      //
+      // case addProduct:
+      //   return CupertinoPageRoute(builder: (_) {
+      //     return BlocProvider(
+      //       create: (ctx) => ProductBloc( ProductInitial(),productsRepo),
+      //       child: const AddProduct(),
+      //     );
+      //   });
 
       case buyProducts:
         return MaterialPageRoute(builder: (_) {
           return BlocProvider(
               create: (ctx) => ProductBloc( ProductInitial(),productsRepo),
 
-              child: const AddProduct());
+              child: const AllProducts());
         });
 
       case favoritesPage:

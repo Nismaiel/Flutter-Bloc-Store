@@ -1,5 +1,6 @@
 import 'package:bruva/business_logic/auth/auth_bloc.dart';
 import 'package:bruva/consts/constants.dart';
+import 'package:bruva/presentation/screens/auth/register.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,9 +32,8 @@ class _LoginState extends State<Login> {
         ],
       );
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.end,
+    return ListView(
+
       children: [
         const Padding(
           padding: EdgeInsets.all(28.0),
@@ -47,7 +47,7 @@ class _LoginState extends State<Login> {
           ),
         ),
         Container(
-          height: MediaQuery.of(context).size.height / 1.5,
+          height: MediaQuery.of(context).size.height / 1.1,
           decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -156,7 +156,17 @@ class _LoginState extends State<Login> {
                               : Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.w600),
-                    ))
+                    )),
+                TextButton(onPressed: (){
+                  Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (context) => Register(),));
+                }, child:const Text(
+                  'are you new here? Register ',
+                  style: TextStyle(
+                      color: Colors.purple,
+                      height: 2.5,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
+                ),)
               ],
             ),
           ),
