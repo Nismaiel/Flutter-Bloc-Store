@@ -3,8 +3,8 @@ part of 'colors_cubit.dart';
 @immutable
 abstract class ColorsState {
   List get colorsList => [];
-
   List get sizesList => [];
+  List<File> get imagesList => <File>[];
 
   get selectedGender => '';
 
@@ -18,6 +18,7 @@ class ColorsInitial extends ColorsState {}
 class ColorsAdded extends ColorsState {
   final List colors;
   final List sizes;
+  final List<File> images;
   final gender;
   final category;
   final subCategory;
@@ -25,6 +26,7 @@ class ColorsAdded extends ColorsState {
   ColorsAdded(
       {this.colors = const [],
       this.sizes = const [],
+        this.images=const<File>[],
       this.gender,
       this.category,
       this.subCategory});
@@ -36,6 +38,9 @@ class ColorsAdded extends ColorsState {
   @override
   // TODO: implement colorsList
   get sizesList => sizes;
+  @override
+  // TODO: implement colorsList
+  get imagesList => images;
 
   @override
   // TODO: implement colorsList

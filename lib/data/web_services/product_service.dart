@@ -1,9 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:bruva/consts/constants.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:dio/dio.dart';
 import 'dart:io' as io;
+
+import 'package:bruva/consts/constants.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
+
 class ProductService {
   late Dio dio;
 
@@ -17,27 +22,52 @@ class ProductService {
     dio = Dio(options);
   }
 
+  Future<dynamic> addProduct(
+      List<File> images,
+      String name,
+      String price,
+      String beforeDiscount,
+      String description,
+      List colors,
+      List sizes,
+      String gender,
+      String category,
+      String subCategory) async {
+    String prodId = Uuid().v4();
 
-  Future uploadFile(id,File img)async{
+    final imageUrlList = await uploadFile(prodId, images);
 
-    firebase_storage.Reference ref=  firebase_storage.FirebaseStorage.instance.ref().child('products').child('$id.jpg');
-    await ref.putFile(img);
-    final downloadUrl=await ref.getDownloadURL();
-    return downloadUrl;
-
-  }
-  Future<dynamic> addProduct(File image,String name,String price,String description ) async {
-    final imageUrl = await uploadFile(
-        DateTime.now().millisecondsSinceEpoch, io.File(image.path));
     Map<String, dynamic> prod = {
-      'id': DateTime.now().millisecondsSinceEpoch,
+      'id': prodId,
       'name': name,
       'price': price,
-      'description':description,
-      'image': imageUrl
-
+      'beforeDiscount': beforeDiscount,
+      'description': description,
+      'images': imageUrlList,
+      'colors': colors,
+      'sizes': sizes,
+      'gender': gender,
+      'category': category,
+      'subCategory': subCategory,
+      'sellerId': FirebaseAuth.instance.currentUser!.uid
     };
-    dio.post(productUrl, data: json.encode(prod));
+    String url =
+        'https://test-33476-default-rtdb.firebaseio.com/products.json';
+    http.post(Uri.parse(url),body: json.encode(prod));
+  }
+
+  Future uploadFile(String prodId, List<File> images) async {
+    List<String> downloadUrls = [];
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('products')
+        .child('${DateTime.now().microsecondsSinceEpoch.toString()}.jpg');
+    for (var element in images) {
+      await ref.putFile(element);
+      final tempDownloadUrl = await ref.getDownloadURL();
+      downloadUrls.add(tempDownloadUrl);
+    }
+    return downloadUrls;
   }
 
   Future getAllProducts() async {
@@ -46,6 +76,8 @@ class ProductService {
 
       return response.data;
     } catch (e) {
+      print(e);
+
       return [];
     }
   }

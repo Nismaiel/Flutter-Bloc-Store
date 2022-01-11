@@ -15,15 +15,6 @@ final  List<Product> products;
   ProductsLoaded({required this.products});}
 
 
-class ImagesAdded extends ProductState {
-  final List images;
- ImagesAdded({ this.images=const[]});
-
-  @override
-  List get imagesList => images;
-}
-
-
 class ErrorState extends ProductState{
  final String message;
   ErrorState({required this.message});

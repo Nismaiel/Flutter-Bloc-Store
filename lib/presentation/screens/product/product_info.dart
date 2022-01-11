@@ -33,7 +33,7 @@ class _ProductInfoState extends State<ProductInfo> with TickerProviderStateMixin
                       .size
                       .height / 2.2,
                   child: Image.network(
-                    widget.product.image,
+                    widget.product.images.first,
                     fit: BoxFit.fill,
                   ),
                 ),Positioned(

@@ -19,6 +19,7 @@ List<Product> products=[];
    return products;
 
  }catch(e){
+   print(e);
    return[];
  }
 }

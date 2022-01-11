@@ -5,8 +5,9 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:bruva/data/repositories/products_repo.dart';
+import 'package:bruva/data/web_services/product_service.dart';
 import 'package:equatable/equatable.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 part 'product_event.dart';
@@ -27,35 +28,29 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         } catch (e) {
           emit(ErrorState(message: e.toString()));
         }
-      }else if(event is AddImage){
-        addImage(event, state);
-      }else if(event is DeleteImage){
-        deleteImage(event, state);
       }
+      if (event is AddNewProduct) {
+        emit(LoadingState());
+        try {
+          await ProductService().addProduct(
+              event.images,
+              event.name,
+              event.price,
+              event.beforeDiscount,
+              event.description,
+              event.colors,
+              event.sizes,
+              event.gender,
+              event.category,event.subCategory
+          );
+          emit(ProductInitial());
+        } catch (e) {
+          debugPrint(e.toString());
+        }      }
     });
   }
 
+  addNewProduct(AddNewProduct event) async {
 
-addImage(AddImage event,ProductState state){
-  try {
-    emit(ImagesAdded(images: List.from(state.imagesList)..add(event.image)));
-  } catch (e) {
-    emit(ErrorState(message: e.toString()));
-  }
-}
-
-deleteImage(DeleteImage event,ProductState state){
-  try{
-    emit(ImagesAdded(images: List.from(state.imagesList)..removeAt(event.index)));
-  }catch(e){
-    emit(ErrorState(message: e.toString()));
-  }
-}
-
-
-
-  addProduct() {
-    productsRepo.addProduct();
-    return [];
   }
 }

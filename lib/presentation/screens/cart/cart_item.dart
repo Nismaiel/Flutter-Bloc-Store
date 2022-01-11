@@ -33,7 +33,7 @@ class CartItem extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Image.network(product.image),
+          leading: Image.network(product.images.first),
           title: Text(product.name),
           subtitle:
           Text(product.price),

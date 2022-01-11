@@ -39,7 +39,7 @@ class _ProductItemState extends State<ProductItem> {
             child: Stack(
               children: <Widget>[
                 Image.network(
-              widget.product.image,
+              widget.product.images.first,
                   height: MediaQuery.of(context)
                       .size
                       .height /

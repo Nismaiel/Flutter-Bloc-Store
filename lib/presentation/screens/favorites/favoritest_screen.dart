@@ -80,7 +80,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                       ),
                                     ),
                                     child: ListTile(
-                                      leading: Image.network(state.favorites.products[index].image),
+                                      leading: Image.network(state.favorites.products[index].images.first),
                                       title: Text(state.favorites.products[index].name),
                                       subtitle:
                                       Text(state.favorites.products[index].price),

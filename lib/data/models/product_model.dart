@@ -1,18 +1,31 @@
 class Product{
-  late int id;
+  late String id;
   late String name;
   late String description;
   late String price;
-  late String image;
-  // late String sellerId;
+  late String beforeDiscount;
+  late String category;
+  late String subCategory;
+  late String gender;
+  late List images;
+  late List sizes;
+  late List colors;
+  late String sellerId;
 
   Product.fromJson(Map<String,dynamic>json){
     id=json['id'];
     name=json['name'];
     description=json['description'];
     price=json['price'];
-    image=json['image'];
-    // sellerId=json['sellerId'];
+    images=json['images'];
+    sellerId=json['sellerId'];
+    beforeDiscount=json['beforeDiscount'];
+    category=json['category'];
+    subCategory=json['subCategory'];
+    gender=json['gender'];
+    sizes=json['sizes'];
+    colors=json['colors'];
+
   }
 
   Map<String, dynamic> toJson() =>
@@ -21,8 +34,14 @@ class Product{
         'name':name,
         'description':description,
         'price':price,
-        'image':image,
-        // 'sellerId':sellerId,
+        'images':images,
+        'sellerId':sellerId,
+        "colors":colors,
+        'beforeDiscount':beforeDiscount,
+        'category':category,
+        'subCategory':subCategory,
+        'gender':gender,
+        'sizes':sizes
       };
 
 }
