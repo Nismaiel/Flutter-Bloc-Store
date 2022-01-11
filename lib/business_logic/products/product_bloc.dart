@@ -28,13 +28,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           emit(ErrorState(message: e.toString()));
         }
       }else if(event is AddImage){
-       addImage(event, state);
+        addImage(event, state);
       }else if(event is DeleteImage){
-     deleteImage(event, state);
-      }else if(event is AddColor){
-        addColor(event, state);
-      }else if(event is DeleteColor){
-        deleteColor(event, state);
+        deleteImage(event, state);
       }
     });
   }
@@ -47,15 +43,7 @@ addImage(AddImage event,ProductState state){
     emit(ErrorState(message: e.toString()));
   }
 }
-addColor(AddColor event,ProductState state){
-    try{
-      print('test1');
-      emit(ColorsAdded(colors:List.from(state.colorsList)..add(event.colorVal) ));
-    }catch(e){
-      print(e.toString());
-      emit( ErrorState(message: e.toString()));
-  }
-}
+
 deleteImage(DeleteImage event,ProductState state){
   try{
     emit(ImagesAdded(images: List.from(state.imagesList)..removeAt(event.index)));
@@ -64,14 +52,6 @@ deleteImage(DeleteImage event,ProductState state){
   }
 }
 
-deleteColor(DeleteColor event,ProductState state){
-  try{
-    emit(ColorsAdded(colors:List.from(state.colorsList)..removeAt(event.index) ));
-
-  }catch(e){
-    emit( ErrorState(message: e.toString()));
-  }
-}
 
 
   addProduct() {

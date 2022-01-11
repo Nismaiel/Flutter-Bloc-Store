@@ -133,7 +133,7 @@ class _AllProductsState extends State<AllProducts> {
               }),
         ],
         title: const Text(
-          'Bruva',
+          'BRUVA',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.deepPurple,

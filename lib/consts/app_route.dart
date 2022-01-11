@@ -42,7 +42,7 @@ class AppRouter {
           return BlocProvider(
               create: (ctx) => ProductBloc( ProductInitial(),productsRepo),
 
-              child: const AllProducts());
+              child: const AddProduct());
         });
 
       case favoritesPage:

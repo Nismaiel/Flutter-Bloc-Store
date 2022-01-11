@@ -18,78 +18,75 @@ class landing extends StatefulWidget {
 class _landingState extends State<landing> {
 
   Widget LandingForm() {
-    return SingleChildScrollView(
+    return Column(
+      children: [
+           SizedBox(height: MediaQuery.of(context).size.height/2.5,child: Image.asset("assets/logo_transparent.png")),
+        Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height / 1.7,
+          decoration: const BoxDecoration(
+              color: Color.fromRGBO(124, 128, 219, 1),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+          child: Column(
+            children: [
+              const Text(
+                'Hi There,',
+                style: TextStyle(
+                    color: Colors.white,
+                    height: 2,
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold),
+              ),
+              const Text(
+                'I,m BRUVA',
+                style: TextStyle(
+                    color: Colors.white,
+                    height: 2,
+                    fontSize: 45,
+                    fontWeight: FontWeight.w600),
+              ),
 
-      child: Column(
-        children: [
-             SizedBox(height: MediaQuery.of(context).size.height/2.5,child: Image.asset("assets/logo_transparent.png")),
-          Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height / 1.7,
-            decoration: const BoxDecoration(
-                color: Color.fromRGBO(124, 128, 219, 1),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-            child: Column(
-              children: [
-                const Text(
-                  'Hi There,',
-                  style: TextStyle(
-                      color: Colors.white,
-                      height: 2,
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold),
+              const Text(
+                'your new shopping assistant',
+                style: TextStyle(
+                    color: Colors.white70,
+                    height: 3,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height/12,),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push( CupertinoPageRoute(builder: (context) =>const Register(),));
+                },
+                child: const Text(
+                  'Register',
+                  style: TextStyle(color: Color.fromRGBO(124, 128, 219, 1),fontSize: 25),
                 ),
-                const Text(
-                  'I,m BRUVA',
-                  style: TextStyle(
-                      color: Colors.white,
-                      height: 2,
-                      fontSize: 45,
-                      fontWeight: FontWeight.w600),
-                ),
-
-                const Text(
-                  'your new shopping assistant',
-                  style: TextStyle(
-                      color: Colors.white70,
-                      height: 3,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height/12,),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push( CupertinoPageRoute(builder: (context) =>const Register(),));
-                  },
-                  child: const Text(
-                    'Hi Bruva',
-                    style: TextStyle(color: Color.fromRGBO(124, 128, 219, 1),fontSize: 25),
-                  ),
-                  style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.all(
-                          Size(MediaQuery.of(context).size.width / 1.1, 60)), shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white)),
-                ),
-                TextButton(onPressed: (){
-                  Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (context) => Login(),));
-                }, child:const Text(
-                  'already have an account? Signin ',
-                  style: TextStyle(
-                      color: Colors.white,
-                      height: 2.5,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600),
-                ),)
-              ],
-            ),
+                style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all(
+                        Size(MediaQuery.of(context).size.width / 1.1, 60)), shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white)),
+              ),
+              TextButton(onPressed: (){
+                Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (context) => Login(),));
+              }, child:const Text(
+                'already have an account? Signin ',
+                style: TextStyle(
+                    color: Colors.white,
+                    height: 2.5,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600),
+              ),)
+            ],
           ),
-        ],
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.center,
-      ),
+        ),
+      ],
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
     );
   }
 @override

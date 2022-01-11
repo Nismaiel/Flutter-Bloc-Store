@@ -3,7 +3,7 @@ part of 'favorites_bloc.dart';
 abstract class FavoritesState extends Equatable {
   const FavoritesState();
 
-  get favorites => null;
+  get favorites => [];
 }
 
 class FavoritesInitial extends FavoritesState {

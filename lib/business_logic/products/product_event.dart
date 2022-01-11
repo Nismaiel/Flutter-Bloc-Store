@@ -12,7 +12,7 @@ class AddImage extends ProductEvent{
 }
 class AddColor extends ProductEvent{
   final int colorVal;
-  AddColor(this.colorVal);
+  AddColor({required this.colorVal});
 }
 
 

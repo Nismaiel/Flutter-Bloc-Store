@@ -3,8 +3,6 @@ part of 'product_bloc.dart';
 @immutable
 abstract class ProductState  {
    get  imagesList => [];
-   get colorsList => [];
-
 }
 
 class ProductInitial extends ProductState {
@@ -23,17 +21,8 @@ class ImagesAdded extends ProductState {
 
   @override
   List get imagesList => images;
-
-
 }
-class ColorsAdded extends ProductState{
-  final List colors;
-  ColorsAdded({this.colors=const[]});
 
-  @override
-  List get colorsList => colors;
-
-}
 
 class ErrorState extends ProductState{
  final String message;
