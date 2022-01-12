@@ -4,6 +4,7 @@ abstract class CartState extends Equatable {
   const CartState();
 
   get cartItems => null;
+
 }
 
 class CartInitial extends CartState {
@@ -19,8 +20,9 @@ class CartLoaded extends CartInitial {
 
   CartLoaded({this.cartItems = const CartItems()});
 
-  @override
+
   List<Object> get props => [cartItems];
+
 }
 
 class CartError extends CartInitial {

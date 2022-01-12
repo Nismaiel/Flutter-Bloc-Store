@@ -5,8 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartItem extends StatelessWidget {
   final Product product;
-
-  const CartItem({Key? key, required this.product}) : super(key: key);
+final String size;
+final int color;
+  const CartItem({Key? key, required this.product,required this.size,required this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

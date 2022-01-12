@@ -1,5 +1,6 @@
 import 'package:bruva/business_logic/cart/cart_bloc.dart';
 import 'package:bruva/business_logic/favorites/favorites_bloc.dart';
+import 'package:bruva/data/models/cart_model.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,7 +73,7 @@ Widget favoritesButton(Product product) {
   );
 }
 
-Widget cartButton(Product product) {
+Widget cartButton(Product product,String size,int color,bool enabled) {
   return BlocBuilder<CartBloc, CartState>(builder: (context, state) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 15.0),
@@ -82,12 +83,12 @@ Widget cartButton(Product product) {
         children: <Widget>[
           Expanded(
             child: TextButton(
-              onPressed: () {
+              onPressed:!state.cartItems.products.contains(product)&&!enabled?(){}: () {
                 state.cartItems.products.contains(product)
                     ? BlocProvider.of<CartBloc>(context)
                         .add(RemoveFromCart(product: product))
                     : BlocProvider.of<CartBloc>(context)
-                        .add(AddToCart(product: product));
+                        .add(AddToCart(product:product,size: size,color:color , ));
               },
               child: Container(
                 height: MediaQuery.of(context).size.height / 20,

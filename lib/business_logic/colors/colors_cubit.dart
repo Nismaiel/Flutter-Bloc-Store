@@ -78,5 +78,12 @@ class ColorsCubit extends Cubit<ColorsState> {
     }
   }
 
+  addCartColor(int color){
+    emit(ColorsAdded(colors:[color] ,sizes: state.sizesList));
+  }
+  addCartSize(String size){
+    emit(ColorsAdded(sizes:[size],colors:state.colorsList ));
+  }
+
 
 }

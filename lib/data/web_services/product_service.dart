@@ -22,7 +22,7 @@ class ProductService {
     dio = Dio(options);
   }
 
-  Future<dynamic> addProduct(
+  Future addProduct(
       List<File> images,
       String name,
       String price,
@@ -33,10 +33,12 @@ class ProductService {
       String gender,
       String category,
       String subCategory) async {
-    String prodId = Uuid().v4();
+    String prodId =const Uuid().v4();
 
-    final imageUrlList = await uploadFile(prodId, images);
+     List imageUrlList=[] ;
 
+    imageUrlList=await Future.wait(images.map((image) => uploadFile( image)));
+for (int i=0;i<images.length;i++){}
     Map<String, dynamic> prod = {
       'id': prodId,
       'name': name,
@@ -56,24 +58,20 @@ class ProductService {
     http.post(Uri.parse(url),body: json.encode(prod));
   }
 
-  Future uploadFile(String prodId, List<File> images) async {
-    List<String> downloadUrls = [];
+  Future <String> uploadFile(File image) async {
+
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('products')
-        .child('${DateTime.now().microsecondsSinceEpoch.toString()}.jpg');
-    for (var element in images) {
-      await ref.putFile(element);
-      final tempDownloadUrl = await ref.getDownloadURL();
-      downloadUrls.add(tempDownloadUrl);
-    }
-    return downloadUrls;
+        .child('${DateTime.now().microsecondsSinceEpoch}.jpg');
+     return  ref.putFile(image).then((p0) =>ref.getDownloadURL());
+
+
   }
 
   Future getAllProducts() async {
     try {
       var response = await dio.get(productUrl);
-
       return response.data;
     } catch (e) {
       print(e);

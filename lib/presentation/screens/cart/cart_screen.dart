@@ -19,6 +19,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(248, 240, 227, 1),
       body: BlocBuilder<CartBloc, CartState>(builder: (context, state) {
         if (state is CartLoading) {
           return const Center(
@@ -84,7 +85,7 @@ class _CartScreenState extends State<CartScreen> {
                                 builder: (context) => ProductInfo(
                                     product: state.cartItems.products[index])));
                       },
-                      child: CartItem(product: state.cartItems.products[index]),
+                      child: CartItem(product: state.cartItems.products[index],color: state.cartItems.colors[index],size: state.cartItems.sizes[index],),
                     );
                   }),
             ],

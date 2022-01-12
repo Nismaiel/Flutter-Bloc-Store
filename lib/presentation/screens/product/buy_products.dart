@@ -6,6 +6,7 @@ import 'package:bruva/business_logic/products/product_bloc.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:bruva/presentation/screens/auth/landing.dart';
 import 'package:bruva/presentation/screens/orders/myOrders.dart';
+import 'package:bruva/presentation/screens/product/add_product.dart';
 import 'package:bruva/presentation/screens/product/product_info.dart';
 import 'package:bruva/presentation/screens/product/product_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -91,7 +92,9 @@ class _AllProductsState extends State<AllProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(248, 240, 227,0.9),
+
+        appBar: AppBar(
 
         leading: IconButton(onPressed: () {
           BlocProvider.of<AuthBloc>(context).add(SignOut());
@@ -116,7 +119,7 @@ class _AllProductsState extends State<AllProducts> {
                   }),
               BlocBuilder<CartBloc, CartState>(builder: (context, state) {
                 if (state.cartItems != null &&
-                    state.cartItems.products.length != 0) {
+                    state.cartItems.products.isNotEmpty) {
                   return Text(state.cartItems.products.length.toString());
                 } else {
                   return const SizedBox();
@@ -131,12 +134,19 @@ class _AllProductsState extends State<AllProducts> {
               onPressed: () {
                 Navigator.pushNamed(context, favoritesPage);
               }),
+          IconButton(
+              icon: const Icon(
+                Icons.shop, color: Colors.white,
+              ),
+              onPressed: () {
+              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => AddProduct(),));
+              }),
         ],
         title: const Text(
           'BRUVA',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.black,
       ),
       body: buildBlocWidget(),
     );

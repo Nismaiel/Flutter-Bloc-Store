@@ -7,10 +7,7 @@ class ProductsRepo{
 final ProductService productService;
 ProductsRepo(this.productService);
 
-Future<dynamic> addProduct()async{
- productService.addProduct;
-return[];
-}
+
 Future<List<Product>> getAllProducts()async{
 List<Product> products=[];
  try{
