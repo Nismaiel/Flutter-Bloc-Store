@@ -1,6 +1,5 @@
 import 'package:bruva/data/models/product_model.dart';
 import 'package:flutter/material.dart';
-
 import '../../widgets.dart';
 
 

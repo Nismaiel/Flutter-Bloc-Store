@@ -19,7 +19,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(248, 240, 227, 1),
+      backgroundColor: const Color.fromRGBO(248, 240, 227, 1),
       body: BlocBuilder<CartBloc, CartState>(builder: (context, state) {
         if (state is CartLoading) {
           return const Center(

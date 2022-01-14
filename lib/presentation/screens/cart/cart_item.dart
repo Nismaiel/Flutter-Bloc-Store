@@ -38,6 +38,13 @@ final int color;
           title: Text(product.name),
           subtitle:
           Text(product.price),
+          trailing: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text('size:${product.sizes.first}'),
+              CircleAvatar(maxRadius: 15,backgroundColor: Color(product.colors.first),)
+            ],
+          ),
+
         ),
       ),
     );

@@ -144,17 +144,22 @@ class _ProductInfoState extends State<ProductInfo>
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            decoration:  BoxDecoration(
+                                            decoration: BoxDecoration(
                                               shape: BoxShape.circle,
-                                              boxShadow:widget.product.sizes[index]
-                                                  .toString()==state.sizesList[0]?[]:const [
-                                                BoxShadow(
-                                                    color: Colors.black45,
-                                                    blurRadius: 2,
-                                                    spreadRadius: 2,
-                                                    offset: Offset(1.1, 1.3))
-                                              ],
-                                              color:const Color.fromRGBO(
+                                              boxShadow: widget
+                                                          .product.sizes[index]
+                                                          .toString() ==
+                                                      state.sizesList[0]
+                                                  ? []
+                                                  : const [
+                                                      BoxShadow(
+                                                          color: Colors.black45,
+                                                          blurRadius: 2,
+                                                          spreadRadius: 2,
+                                                          offset:
+                                                              Offset(1.1, 1.3))
+                                                    ],
+                                              color: const Color.fromRGBO(
                                                   249, 241, 241, 1),
                                             ),
                                           );
@@ -283,11 +288,15 @@ class _ProductInfoState extends State<ProductInfo>
             ),
           ),
         ),
-        bottomNavigationBar: BlocBuilder<ColorsCubit, ColorsState>(
-  builder: (context, state) {
-    return cartButton(widget.product, '', 0,state.colorsList.isNotEmpty&&state.sizesList.isNotEmpty);
-  },
-),
+          bottomNavigationBar: BlocBuilder<ColorsCubit, ColorsState>(
+          builder: (context, state) {
+            return cartButton(
+                widget.product,
+                state.sizesList.first!=''?state.sizesList.first: '',
+                state.colorsList.first!=''?state.colorsList.first:0,
+                state.colorsList.isNotEmpty && state.sizesList.isNotEmpty);
+          },
+        ),
       ),
     );
   }
