@@ -136,7 +136,7 @@ class _ProductItemState extends State<ProductItem> {
             ),
           ),
         ),
-        Positioned(child: favoritesButton(widget.product),top: 0,right: 0,),
+        // Positioned(child: favoritesButton(widget.product),top: 0,right: 0,),
       ],
     );
   }

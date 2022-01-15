@@ -1,3 +1,4 @@
+import 'package:bruva/business_logic/cart/cart_cubit.dart';
 import 'package:bruva/business_logic/colors/colors_cubit.dart';
 import 'package:bruva/business_logic/myOrders/my_orders_cubit.dart';
 import 'package:bruva/business_logic/products/product_bloc.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'business_logic/Order/checkout_cubit.dart';
 import 'business_logic/auth/auth_bloc.dart';
-import 'business_logic/cart/cart_bloc.dart';
 import 'business_logic/favorites/favorites_bloc.dart';
 import 'business_logic/checkout/checkOut_bloc.dart';
 import 'consts/app_route.dart';
@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
     ProductsRepo productsRepo=ProductsRepo(ProductService());
     return MultiBlocProvider(
       providers:[
-        BlocProvider(create:(ctx)=>CartBloc()..add(StartCart())),
+        BlocProvider(create:(ctx)=>CartCubit()),
         BlocProvider(create:(ctx)=>FavoritesBloc()..add(StartFavorites())),
         BlocProvider(create: (context)=>CheckOutBloc()..add(StartOrders())),
         BlocProvider(create: (context)=>AuthBloc()),

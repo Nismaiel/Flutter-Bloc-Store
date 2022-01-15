@@ -1,13 +1,16 @@
 import 'package:bruva/business_logic/Order/checkout_cubit.dart';
-import 'package:bruva/business_logic/cart/cart_bloc.dart';
+import 'package:bruva/business_logic/cart/cart_cubit.dart';
+import 'package:bruva/business_logic/cart/cart_state.dart';
 import 'package:bruva/business_logic/checkout/checkOut_bloc.dart';
+import 'package:bruva/data/models/cart_model.dart';
 import 'package:bruva/presentation/screens/checkout/order_now.dart';
 import 'package:bruva/presentation/screens/product/product_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cart_item.dart';
-
+import 'package:http/http.dart'as http;
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
 
@@ -16,11 +19,31 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+   getCart() async* {
+    // emit(CartLoading());
+    try {
+      // await Future.delayed(const Duration(milliseconds:500));
+      final res =await http.get(Uri.parse('https://test-33476-default-rtdb.firebaseio.com/cart/${FirebaseAuth.instance.currentUser!.uid}.json'
+      ));
+      print('aslkflas;');
+      print(res.body);
+      // emit(CartLoaded());
+    } catch (e) {
+    print(e.toString());
+      // emit(CartError(message: e.toString()));
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    getCart();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(248, 240, 227, 1),
-      body: BlocBuilder<CartBloc, CartState>(builder: (context, state) {
+      body: BlocBuilder<CartCubit, CartState>(builder: (context, state) {
         if (state is CartLoading) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -72,6 +95,9 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
               ),
+
+
+
               ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -85,13 +111,15 @@ class _CartScreenState extends State<CartScreen> {
                                 builder: (context) => ProductInfo(
                                     product: state.cartItems.products[index])));
                       },
-                      child: CartItem(product: state.cartItems.products[index],color: state.cartItems.colors[index],size: state.cartItems.sizes[index],),
+                      child: CartItem(product: state.cartItems.products[index],color: state.cartItems.colors[index],size: state.cartItems.sizes[index],id: state.cartItems.id,),
                     );
                   }),
             ],
           );
         } else {
-          return const SizedBox();
+          return  Center(child: TextButton(onPressed: (){
+            getCart();
+          }, child: Text('get')),);
         }
       }),
     );

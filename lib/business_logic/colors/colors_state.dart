@@ -2,8 +2,8 @@ part of 'colors_cubit.dart';
 
 @immutable
 abstract class ColorsState {
-  List get colorsList => [''];
-  List get sizesList => [''];
+  List get colorsList => [0];
+  List get sizesList => [0];
   List<File> get imagesList => <File>[];
 
   get selectedGender => '';

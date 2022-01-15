@@ -1,4 +1,4 @@
-import 'package:bruva/business_logic/cart/cart_bloc.dart';
+import 'package:bruva/business_logic/cart/cart_cubit.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +7,8 @@ class CartItem extends StatelessWidget {
   final Product product;
 final String size;
 final int color;
-  const CartItem({Key? key, required this.product,required this.size,required this.color}) : super(key: key);
+final String id;
+  const CartItem({Key? key, required this.product,required this.size,required this.color,required this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ final int color;
         key: ValueKey(product.id),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
-          BlocProvider.of<CartBloc >(context).add(RemoveFromCart(product: product));
+          context.read<CartCubit>().removeFromCart(id);
         },
         background: Container(
           color: Colors.red,

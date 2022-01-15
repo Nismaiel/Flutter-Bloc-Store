@@ -1,6 +1,6 @@
-part of 'cart_bloc.dart';
+import 'package:bruva/data/models/cart_model.dart';
 
-abstract class CartState extends Equatable {
+abstract class CartState  {
   const CartState();
 
   get cartItems => null;
