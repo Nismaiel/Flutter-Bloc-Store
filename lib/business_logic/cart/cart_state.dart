@@ -16,9 +16,9 @@ class CartLoading extends CartInitial {}
 
 class CartLoaded extends CartInitial {
   @override
-  final CartItems cartItems;
+  late CartItems cartItems;
 
-  CartLoaded({this.cartItems = const CartItems()});
+  CartLoaded({required this.cartItems});
 
 
   List<Object> get props => [cartItems];

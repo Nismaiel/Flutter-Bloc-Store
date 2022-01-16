@@ -19,24 +19,10 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-   getCart() async* {
-    // emit(CartLoading());
-    try {
-      // await Future.delayed(const Duration(milliseconds:500));
-      final res =await http.get(Uri.parse('https://test-33476-default-rtdb.firebaseio.com/cart/${FirebaseAuth.instance.currentUser!.uid}.json'
-      ));
-      print('aslkflas;');
-      print(res.body);
-      // emit(CartLoaded());
-    } catch (e) {
-    print(e.toString());
-      // emit(CartError(message: e.toString()));
-    }
-  }
   @override
   void initState() {
     // TODO: implement initState
-    getCart();
+    context.read<CartCubit>().getCartItems();
     super.initState();
   }
   @override
@@ -116,10 +102,8 @@ class _CartScreenState extends State<CartScreen> {
                   }),
             ],
           );
-        } else {
-          return  Center(child: TextButton(onPressed: (){
-            getCart();
-          }, child: Text('get')),);
+        } else{
+          return const SizedBox();
         }
       }),
     );

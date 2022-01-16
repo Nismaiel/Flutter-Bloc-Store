@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:bruva/data/models/cart_model.dart';
@@ -12,18 +13,28 @@ class CartCubit extends Cubit<CartState> {
 
   final String cartUrl=
       'https://test-33476-default-rtdb.firebaseio.com/cart/${FirebaseAuth.instance.currentUser!.uid}.json';
+  StreamController<CartItems> streamController = StreamController();
 
- Stream<CartItems> getCart() async* {
-    emit(CartLoading());
-    try {
-      await Future.delayed(const Duration(seconds: 5));
-      final res =await http.get(Uri.parse(cartUrl));
-      print(res.body);
-      emit(CartLoaded());
-    } catch (e) {
-      emit(CartError(message: e.toString()));
-    }
+  Future<List<CartItems>> getCartItems()async{
+    final response=await http.get(Uri.parse(cartUrl));
+    final databody=json.decode(response.body);
+    List<CartItems> items=[];
+    databody.forEach((key,value){items.add(CartItems.fromJson(value));});
+    print(items);
+    return items;
   }
+
+  // getCart() async {
+  //   emit(CartLoading());
+  //   try {
+  //     await Future.delayed(const Duration(seconds: 5));
+  //     final res =await http.get(Uri.parse(cartUrl));
+  //     print(res.body);
+  //     emit(CartLoaded(cartItems: ));
+  //   } catch (e) {
+  //     emit(CartError(message: e.toString()));
+  //   }
+  // }
 
   addToCart(size,color,Product product) async {
     try {

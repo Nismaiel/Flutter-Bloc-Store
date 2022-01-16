@@ -1,14 +1,19 @@
 import 'package:bruva/data/models/product_model.dart';
-import 'package:equatable/equatable.dart';
 
-class CartItems extends Equatable{
-  final List<Product>products;
-   final double total;
-   final List<String> sizes;
-   final List<int> colors;
-   final String id;
-   const CartItems({this.products=const<Product>[], this.total= 0,this.sizes=const[],this.colors=const[],this.id=''});
+class CartItems{
+  late List<Product>products;
+  late double total;
+  late List<String> sizes;
+  late List<int> colors;
+  late String id;
+    CartItems({this.products=const<Product>[], this.total= 0,this.sizes=const[],this.colors=const[],this.id=''});
 
-  @override
-  List<Object?>get props=>products;
+   CartItems.fromJson(Map<String,dynamic>json){
+     products=json['products'];
+     total=json['total'];
+     sizes=json['sizes'];
+     colors=json['colors'];
+     id=json['id'];
+   }
+
 }
