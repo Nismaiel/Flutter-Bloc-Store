@@ -6,9 +6,11 @@ class CartItems{
   late String size;
   late int color;
   late String id;
+  late String cartKey;
     CartItems({required this.product,this.size='',this.color=0,this.id=''});
 
-   CartItems.fromJson(Map<String,dynamic>json){
+   CartItems.fromJson(String key,Map<String,dynamic>json){
+     cartKey=key;
      product=Product.fromJson(json['product']);
      size=json['size'];
      color=json['color'];

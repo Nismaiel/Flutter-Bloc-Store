@@ -15,7 +15,7 @@ const CartItem({Key? key,required this.cartItems}):super(key: key);
         key: ValueKey(cartItems.id),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
-          context.read<CartCubit>().removeFromCart(cartItems.id);
+          context.read<CartCubit>().removeFromCart(cartItems.cartKey);
         },
         background: Container(
           color: Colors.red,

@@ -19,10 +19,13 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  int total=0;
   @override
   void initState() {
     // TODO: implement initState
     context.read<CartCubit>().getCartItems();
+
+    total=context.read<CartCubit>().total;
     super.initState();
   }
   @override
@@ -48,7 +51,7 @@ class _CartScreenState extends State<CartScreen> {
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                       Chip(
-                        label: Text('50',
+                        label: Text(context.read<CartCubit>().total.toString(),
                           // state.cartItems.total.toString(),
                           style: const TextStyle(color: Colors.white70),
                         ),
@@ -67,7 +70,7 @@ class _CartScreenState extends State<CartScreen> {
                                     AddOrder(
                                         products: state.cartItems,
                                         // cartTotal: state.cartItems.total,
-                                        cartTotal: '50',
+                                        cartTotal: total.toString(),
                                         orderId: DateTime.now()
                                             .millisecondsSinceEpoch));
                                 Navigator.push(
