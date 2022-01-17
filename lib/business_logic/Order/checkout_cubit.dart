@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:bruva/consts/constants.dart';
+import 'package:bruva/data/models/cart_model.dart';
 import 'package:bruva/data/models/myOrdersModel.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +37,7 @@ class checkoutCubit extends Cubit<checkOutCubitState> {
 
   placeOrder(
       String orderId,
-      List<Product> products,
+      List<CartItems> products,
       String userId,
       bool onlinePayment,
       String total,

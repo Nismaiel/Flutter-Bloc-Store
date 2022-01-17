@@ -9,8 +9,8 @@ class StartOrders extends CheckoutEvent{}
 
 class AddOrder extends CheckoutEvent{
   final int orderId;
-  final double cartTotal;
-  final List<Product> products;
+  final String cartTotal;
+  final List<CartItems> products;
   const AddOrder({required this.products,required this.cartTotal,required this.orderId});
 @override
   List<Object>get props=>[products];

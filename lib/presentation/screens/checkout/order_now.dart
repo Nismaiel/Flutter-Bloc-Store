@@ -326,12 +326,12 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                   .size
                   .height / 7,
               child: ListView.builder(
-                itemCount: state.orders.products.length,
+                itemCount: state.orders.cartItems.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network(
-                      state.orders.products[index].image,
+                      state.orders.cartItems[index].product.images.first,
                       fit: BoxFit.cover,
                     ),
                   );
@@ -435,7 +435,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               ),
               Text(
-                (state.orders.total + 50.0).toString(),
+                (double.parse(state.orders.total) + 50.0).toString(),
                 style:
                 const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               )
@@ -454,7 +454,7 @@ class _OrderNowScreenState extends State<OrderNowScreen> {
                           .now()
                           .millisecondsSinceEpoch
                           .toString(),
-                      state.orders.products,
+                      state.orders.cartItems,
                       FirebaseAuth.instance.currentUser!.uid,
                       false,
                       state.orders.total.toString(),

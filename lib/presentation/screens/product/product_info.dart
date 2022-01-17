@@ -136,7 +136,7 @@ class _ProductInfoState extends State<ProductInfo>
                                       child:
                                           BlocBuilder<ColorsCubit, ColorsState>(
                                         builder: (context, state) {
-                                          if (state.sizesList.isNotEmpty) {
+                                          if (state.selectedSize.isNotEmpty) {
                                             return Container(
                                               alignment: Alignment.center,
                                               width: 40,
@@ -152,7 +152,7 @@ class _ProductInfoState extends State<ProductInfo>
                                                 boxShadow: widget.product
                                                             .sizes[index]
                                                             .toString() ==
-                                                        state.sizesList[0]
+                                                        state.selectedSize[0]
                                                     ? []
                                                     : const [
                                                         BoxShadow(
@@ -218,7 +218,7 @@ class _ProductInfoState extends State<ProductInfo>
                                       child:
                                           BlocBuilder<ColorsCubit, ColorsState>(
                                         builder: (context, state) {
-                                          if (state.colorsList.isNotEmpty) {
+                                          if (state.selectedColor!=0) {
                                             return Container(
                                               width: 40,
                                               // height: 20,
@@ -226,7 +226,7 @@ class _ProductInfoState extends State<ProductInfo>
                                                 shape: BoxShape.circle,
                                                 boxShadow: widget.product
                                                             .colors[index] ==
-                                                        state.colorsList[0]
+                                                        state.selectedColor
                                                     ? []
                                                     : const [
                                                         BoxShadow(
@@ -300,7 +300,7 @@ class _ProductInfoState extends State<ProductInfo>
               BlocBuilder<ColorsCubit, ColorsState>(
   builder: (context, stateC) {
     return BlocBuilder<CartCubit, CartState>(builder: (context, state) {
-            if(stateC.colorsList.first!=0&&stateC.sizesList.first!=0){
+            if(stateC.selectedColor!=0&&stateC.selectedSize!=''){
               return Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 15.0),
                 child: Row(
@@ -312,7 +312,7 @@ class _ProductInfoState extends State<ProductInfo>
                         onPressed: () {
                           context
                               .read<CartCubit>()
-                              .addToCart(stateC.sizesList, stateC.colorsList, widget.product);
+                              .addToCart(stateC.selectedSize, stateC.selectedColor, widget.product);
                         },
                         child: Container(
                           height: MediaQuery.of(context).size.height / 20,

@@ -9,20 +9,20 @@ class ColorsCubit extends Cubit<ColorsState> {
   ColorsCubit() : super(ColorsInitial());
   addColor(color){
     try{
-      emit(ColorsAdded(colors: List.from(state.colorsList)..add(color),sizes: List.from(state.sizesList),
+      emit(ColorsAdded(color: color,sizes: List.from(state.selectedSize),
           subCategory: state.selectedSubCategory,gender: state.selectedGender,images: state.imagesList,
           category: state.selectedCategory));
     }catch(e){debugPrint(e.toString());}
   }
   removeColor(int index){
     try{
-      emit(ColorsAdded(colors: List.from(state.colorsList)..removeAt(index),sizes: List.from(state.sizesList),subCategory: state.selectedSubCategory,gender: state.selectedGender,
+      emit(ColorsAdded(color: '',sizes: List.from(state.selectedSize),subCategory: state.selectedSubCategory,gender: state.selectedGender,
           category: state.selectedCategory,images: state.imagesList));
     }catch(e){debugPrint(e.toString());}
   }
   addSize(size){
     try{
-      emit(ColorsAdded(sizes: List.from(state.sizesList)..add(size),colors: List.from(state.colorsList),subCategory: state.selectedSubCategory,gender: state.selectedGender,
+      emit(ColorsAdded(sizes: List.from(state.selectedSize)..add(size),color:state.selectedColor,subCategory: state.selectedSubCategory,gender: state.selectedGender,
           category: state.selectedCategory,images: state.imagesList));
     }catch(e){
       debugPrint(e.toString());
@@ -30,7 +30,7 @@ class ColorsCubit extends Cubit<ColorsState> {
   }
   removeSize(size){
     try{
-      emit(ColorsAdded(sizes: List.from(state.sizesList)..removeWhere((element) => element==size),colors: List.from(state.colorsList),subCategory: state.selectedSubCategory,gender: state.selectedGender,
+      emit(ColorsAdded(sizes: List.from(state.selectedSize)..removeWhere((element) => element==size),color: state.selectedColor,subCategory: state.selectedSubCategory,gender: state.selectedGender,
           category: state.selectedCategory,images: state.imagesList));
     }catch(e){
       debugPrint(e.toString());
@@ -38,14 +38,14 @@ class ColorsCubit extends Cubit<ColorsState> {
   }
   addGender(gender){
     try{
-      emit(ColorsAdded(gender: gender,category: state.selectedCategory,sizes: List.from(state.sizesList),colors: List.from(state.colorsList),images: state.imagesList,subCategory: state.selectedSubCategory));
+      emit(ColorsAdded(gender: gender,category: state.selectedCategory,sizes: List.from(state.selectedSize),color: state.selectedColor,images: state.imagesList,subCategory: state.selectedSubCategory));
     }catch(e){
       debugPrint(e.toString());
     }
   }
   addCategory(String category){
     try{
-      emit(ColorsAdded(category: category,gender: state.selectedGender,sizes: List.from(state.sizesList),colors: List.from(state.colorsList),subCategory: state.selectedSubCategory,images: state.imagesList));
+      emit(ColorsAdded(category: category,gender: state.selectedGender,sizes: List.from(state.selectedSize),color: state.selectedColor,subCategory: state.selectedSubCategory,images: state.imagesList));
     }catch(e){
       debugPrint(e.toString());
     }
@@ -54,7 +54,7 @@ class ColorsCubit extends Cubit<ColorsState> {
     try{
       emit(ColorsAdded(subCategory: subCategory,category: state.selectedCategory,
           gender: state.selectedGender,sizes:[],images: state.imagesList,
-          colors: List.from(state.colorsList)));
+          color: state.selectedColor));
     }catch(e){
       debugPrint(e.toString());
     }
@@ -62,8 +62,8 @@ class ColorsCubit extends Cubit<ColorsState> {
   addImage(File image){
     try {
       emit(ColorsAdded(images: List.from(state.imagesList)..add(image),subCategory: state.selectedSubCategory,category: state.selectedCategory,
-          gender: state.selectedGender,sizes: List.from(state.sizesList),
-          colors: List.from(state.colorsList)));
+          gender: state.selectedGender,sizes: state.selectedSize,
+          color:state.selectedColor));
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -71,18 +71,18 @@ class ColorsCubit extends Cubit<ColorsState> {
   deleteImage(index){
     try{
       emit(ColorsAdded(images: List.from(state.imagesList)..removeAt(index),subCategory: state.selectedSubCategory,category: state.selectedCategory,
-          gender: state.selectedGender,sizes: List.from(state.sizesList),
-          colors: List.from(state.colorsList)));
+          gender: state.selectedGender,sizes: state.selectedSize,
+          color:  state.selectedColor));
     }catch(e){
       debugPrint(e.toString());
     }
   }
 
   addCartColor(int color){
-    emit(ColorsAdded(colors:[color] ,sizes: state.sizesList));
+    emit(ColorsAdded(color:color ,sizes: state.selectedSize));
   }
   addCartSize(String size){
-    emit(ColorsAdded(sizes:[size],colors:state.colorsList ));
+    emit(ColorsAdded(sizes:size,color:state.selectedColor ));
   }
 
 

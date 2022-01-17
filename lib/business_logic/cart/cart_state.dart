@@ -16,7 +16,7 @@ class CartLoading extends CartInitial {}
 
 class CartLoaded extends CartInitial {
   @override
-  late CartItems cartItems;
+  late List<CartItems> cartItems;
 
   CartLoaded({required this.cartItems});
 

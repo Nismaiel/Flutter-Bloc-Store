@@ -48,8 +48,8 @@ class _CartScreenState extends State<CartScreen> {
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                       Chip(
-                        label: Text(
-                          state.cartItems.total.toString(),
+                        label: Text('50',
+                          // state.cartItems.total.toString(),
                           style: const TextStyle(color: Colors.white70),
                         ),
                         backgroundColor: Colors.black,
@@ -60,13 +60,14 @@ class _CartScreenState extends State<CartScreen> {
                           style: TextStyle(
                               color: Colors.black, fontWeight: FontWeight.bold),
                         ),
-                        onPressed: state.cartItems.products.isEmpty
+                        onPressed: state.cartItems.isEmpty
                             ? () {}
                             : () {
                                 BlocProvider.of<CheckOutBloc>(context).add(
                                     AddOrder(
-                                        products: state.cartItems.products,
-                                        cartTotal: state.cartItems.total,
+                                        products: state.cartItems,
+                                        // cartTotal: state.cartItems.total,
+                                        cartTotal: '50',
                                         orderId: DateTime.now()
                                             .millisecondsSinceEpoch));
                                 Navigator.push(
@@ -87,7 +88,7 @@ class _CartScreenState extends State<CartScreen> {
               ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: state.cartItems.products.length,
+                  itemCount: state.cartItems.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
@@ -95,13 +96,16 @@ class _CartScreenState extends State<CartScreen> {
                             context,
                             CupertinoPageRoute(
                                 builder: (context) => ProductInfo(
-                                    product: state.cartItems.products[index])));
+                                    product: state.cartItems[index].product)));
                       },
-                      child: CartItem(product: state.cartItems.products[index],color: state.cartItems.colors[index],size: state.cartItems.sizes[index],id: state.cartItems.id,),
+                      // child: CartItem(product: state.cartItems[index].product,color: state.cartItems[index].color,size: state.cartItems[index].size,id: state.cartItems[index].id,),
+                    child: CartItem(cartItems: state.cartItems[index]),
                     );
                   }),
             ],
           );
+        }else if(state is CartInitial){
+          return const Center(child: Text('your cart is empty!!'),);
         } else{
           return const SizedBox();
         }

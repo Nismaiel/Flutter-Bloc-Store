@@ -1,24 +1,21 @@
 import 'package:bruva/business_logic/cart/cart_cubit.dart';
+import 'package:bruva/data/models/cart_model.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartItem extends StatelessWidget {
-  final Product product;
-final String size;
-final int color;
-final String id;
-  const CartItem({Key? key, required this.product,required this.size,required this.color,required this.id}) : super(key: key);
-
+final CartItems cartItems;
+const CartItem({Key? key,required this.cartItems}):super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Dismissible(
 
-        key: ValueKey(product.id),
+        key: ValueKey(cartItems.id),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
-          context.read<CartCubit>().removeFromCart(id);
+          context.read<CartCubit>().removeFromCart(cartItems.id);
         },
         background: Container(
           color: Colors.red,
@@ -35,14 +32,14 @@ final String id;
           ),
         ),
         child: ListTile(
-          leading: Image.network(product.images.first),
-          title: Text(product.name),
+          leading: Image.network(cartItems.product.images.first),
+          title: Text(cartItems.product.name),
           subtitle:
-          Text(product.price),
+          Text(cartItems.product.price),
           trailing: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('size:${product.sizes.first}'),
-              CircleAvatar(maxRadius: 15,backgroundColor: Color(product.colors.first),)
+              Text('size:${cartItems.size}'),
+              CircleAvatar(maxRadius: 15,backgroundColor: Color(cartItems.color),)
             ],
           ),
 

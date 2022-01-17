@@ -138,8 +138,8 @@ class _AddProductState extends State<AddProduct> {
                       state.selectedSubCategory != null &&
                       state.selectedCategory != null &&
                       state.selectedGender != null &&
-                      state.sizesList.isNotEmpty &&
-                      state.colorsList.isNotEmpty &&
+                      state.selectedSize.isNotEmpty &&
+                      state.selectedColor.isNotEmpty &&
                       int.parse(_beforeDiscount.text) >
                           int.parse(_priceController.text)) {
                     BlocProvider.of<ProductBloc>(context).add(AddNewProduct(
@@ -148,8 +148,8 @@ class _AddProductState extends State<AddProduct> {
                         _priceController.text,
                         _beforeDiscount.text,
                         _descriptionController.text,
-                        state.colorsList,
-                        state.sizesList,
+                        state.selectedColor,
+                        state.selectedSize,
                         state.selectedGender,
                         state.selectedCategory,
                         state.selectedSubCategory));
@@ -321,7 +321,7 @@ class _AddProductState extends State<AddProduct> {
                         physics: const NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
-                        itemCount: state.colorsList.length,
+                        itemCount: state.selectedColor.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.all(12.0),
@@ -330,7 +330,7 @@ class _AddProductState extends State<AddProduct> {
                                 context.read<ColorsCubit>().removeColor(index);
                               },
                               child: CircleAvatar(
-                                backgroundColor: Color(state.colorsList[index]),
+                                backgroundColor: Color(state.selectedColor[index]),
                               ),
                             ),
                           );
@@ -470,9 +470,9 @@ class _AddProductState extends State<AddProduct> {
                     ),
                     state.selectedCategory == 'footWear'
                         ? Checkbox(
-                            value: state.sizesList.contains(35 + index),
+                            value: state.selectedSize.contains(35 + index),
                             onChanged: (bool? val) {
-                              state.sizesList.contains(35 + index)
+                              state.selectedSize.contains(35 + index)
                                   ? context
                                       .read<ColorsCubit>()
                                       .removeSize(35+index)
@@ -481,9 +481,9 @@ class _AddProductState extends State<AddProduct> {
                                       .addSize(35+index);
                             })
                         : Checkbox(
-                            value: state.sizesList.contains(sizes[index]),
+                            value: state.selectedSize.contains(sizes[index]),
                             onChanged: (bool? val) {
-                              state.sizesList.contains(sizes[index])
+                              state.selectedSize.contains(sizes[index])
                                   ? context
                                       .read<ColorsCubit>()
                                       .removeSize(sizes[index])

@@ -1,19 +1,25 @@
+
 import 'package:bruva/data/models/product_model.dart';
 
 class CartItems{
-  late List<Product>products;
-  late double total;
-  late List<String> sizes;
-  late List<int> colors;
+  late Product product;
+  late String size;
+  late int color;
   late String id;
-    CartItems({this.products=const<Product>[], this.total= 0,this.sizes=const[],this.colors=const[],this.id=''});
+    CartItems({required this.product,this.size='',this.color=0,this.id=''});
 
    CartItems.fromJson(Map<String,dynamic>json){
-     products=json['products'];
-     total=json['total'];
-     sizes=json['sizes'];
-     colors=json['colors'];
+     product=Product.fromJson(json['product']);
+     size=json['size'];
+     color=json['color'];
      id=json['id'];
    }
+
+  Map<String, dynamic> toJson() =>
+  {    'product':product,
+    'size':size,
+    'color':color,
+    'id':id
+  };
 
 }

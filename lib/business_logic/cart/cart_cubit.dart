@@ -4,37 +4,37 @@ import 'package:bloc/bloc.dart';
 import 'package:bruva/data/models/cart_model.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart'as http;
-
 import 'cart_state.dart';
-
+import 'package:firebase_database/firebase_database.dart';
 class CartCubit extends Cubit<CartState> {
   CartCubit() : super(CartInitial());
 
   final String cartUrl=
-      'https://test-33476-default-rtdb.firebaseio.com/cart/${FirebaseAuth.instance.currentUser!.uid}.json';
+      'https://test-33476-default-rtdb.firebaseio.com/cart.json';
+
+
   StreamController<CartItems> streamController = StreamController();
 
-  Future<List<CartItems>> getCartItems()async{
+   getCartItems()async{
+  try{
+    emit(CartLoading());
     final response=await http.get(Uri.parse(cartUrl));
-    final databody=json.decode(response.body);
+    final decodedBody=json.decode(response.body);
     List<CartItems> items=[];
-    databody.forEach((key,value){items.add(CartItems.fromJson(value));});
+
+    if(decodedBody!=null){
+    decodedBody.forEach((key,value){items.add(CartItems.fromJson(value));});
+    emit(CartLoaded(cartItems:items ));}else{emit(CartInitial());}
     print(items);
-    return items;
+  }catch(e){
+    debugPrint(e.toString());
   }
 
-  // getCart() async {
-  //   emit(CartLoading());
-  //   try {
-  //     await Future.delayed(const Duration(seconds: 5));
-  //     final res =await http.get(Uri.parse(cartUrl));
-  //     print(res.body);
-  //     emit(CartLoaded(cartItems: ));
-  //   } catch (e) {
-  //     emit(CartError(message: e.toString()));
-  //   }
-  // }
+  }
+
+
 
   addToCart(size,color,Product product) async {
     try {
@@ -43,7 +43,8 @@ class CartCubit extends Cubit<CartState> {
         'size': size.toString(),
         'color':color,
         'product':product,
-        'id':DateTime.now().microsecondsSinceEpoch.toString()
+        'id':DateTime.now().microsecondsSinceEpoch.toString(),
+        'userId':FirebaseAuth.instance.currentUser!.uid
       };
 
       await http.post(Uri.parse(cartUrl),body: json.encode(cartMap));
@@ -53,16 +54,12 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
-  removeFromCart(String id) async {
+  removeFromCart(String itemId) async {
     try {
-      // http.delete(url)
-      // emit(CartLoaded(
-      //     cartItems: CartItems(
-      //         products: List.from(state.cartItems.products)
-      //           ..remove(product),
-      //         total: state.cartItems.total - int.parse(event.product.price))));
+   await   FirebaseDatabase.instance.ref('cart').orderByChild('itemId').equalTo(itemId).ref.remove()     ;
+      getCartItems();
      } catch (e) {
-      emit(CartError(message: e.toString()));
+      debugPrint(e.toString());
     }
   }
 }

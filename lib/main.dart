@@ -4,16 +4,19 @@ import 'package:bruva/business_logic/myOrders/my_orders_cubit.dart';
 import 'package:bruva/business_logic/products/product_bloc.dart';
 import 'package:bruva/data/repositories/products_repo.dart';
 import 'package:bruva/data/web_services/product_service.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'business_logic/Order/checkout_cubit.dart';
 import 'business_logic/auth/auth_bloc.dart';
-import 'business_logic/favorites/favorites_bloc.dart';
 import 'business_logic/checkout/checkOut_bloc.dart';
+import 'business_logic/favorites/favorites_bloc.dart';
 import 'consts/app_route.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
   );
@@ -30,25 +33,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
-
   @override
   Widget build(BuildContext context) {
-    ProductsRepo productsRepo=ProductsRepo(ProductService());
+    ProductsRepo productsRepo = ProductsRepo(ProductService());
     return MultiBlocProvider(
-      providers:[
-        BlocProvider(create:(ctx)=>CartCubit()),
-        BlocProvider(create:(ctx)=>FavoritesBloc()..add(StartFavorites())),
-        BlocProvider(create: (context)=>CheckOutBloc()..add(StartOrders())),
-        BlocProvider(create: (context)=>AuthBloc()),
-        BlocProvider(create: (context)=>ProductBloc(ProductInitial(),productsRepo)),
-        BlocProvider(create: (context)=>checkoutCubit()),
-        BlocProvider(create: (context)=>MyOrdersCubit()),
-        BlocProvider(create: (context)=>ColorsCubit()),
-
-
-    ],
+      providers: [
+        BlocProvider(create: (ctx) => CartCubit()),
+        BlocProvider(create: (ctx) => FavoritesBloc()..add(StartFavorites())),
+        BlocProvider(create: (context) => CheckOutBloc()..add(StartOrders())),
+        BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(
+            create: (context) => ProductBloc(ProductInitial(), productsRepo)),
+        BlocProvider(create: (context) => checkoutCubit()),
+        BlocProvider(create: (context) => MyOrdersCubit()),
+        BlocProvider(create: (context) => ColorsCubit()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
