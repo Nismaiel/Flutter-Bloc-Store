@@ -152,7 +152,7 @@ class _ProductInfoState extends State<ProductInfo>
                                                 boxShadow: widget.product
                                                             .sizes[index]
                                                             .toString() ==
-                                                        state.selectedSize[0]
+                                                        state.selectedSize
                                                     ? []
                                                     : const [
                                                         BoxShadow(

@@ -1,9 +1,10 @@
+import 'package:bruva/data/models/cart_model.dart';
 import 'package:bruva/presentation/screens/orders/myOrdersItem.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class MyOrdersDetails extends StatelessWidget {
-  final List products;
+  final List<dynamic> products;
   final String total;
   final String orderId;
   final String date;
@@ -50,7 +51,7 @@ class MyOrdersDetails extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
-                  return MyOrdersItem(product: products[index]);
+                  return MyOrdersItem(cartItems:  products[index]);
                 },
               ),
             ],

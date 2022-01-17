@@ -1,11 +1,12 @@
 
+import 'package:bruva/data/models/cart_model.dart';
 import 'package:bruva/data/models/product_model.dart';
 
 class MyOrdersModel{
     late String orderId;
     late String dateTime;
     late bool onlinePayment;
-    late List products;
+    late List<dynamic> products;
     late String retailPrice;
     late String shippingFee;
     late Map shippingInfo;
