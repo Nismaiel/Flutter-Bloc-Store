@@ -1,9 +1,12 @@
-part of 'favorites_bloc.dart';
 
-abstract class FavoritesState extends Equatable {
+
+
+import 'package:bruva/data/models/favorites_model.dart';
+
+abstract class FavoritesState  {
   const FavoritesState();
 
-  get favorites => [];
+ List<Favorites> get favoritesList => [];
 }
 
 class FavoritesInitial extends FavoritesState {
@@ -15,12 +18,12 @@ class FavoritesLoading extends FavoritesInitial {}
 
 class FavoritesLoaded extends FavoritesInitial {
   @override
-  final Favorites favorites;
+  final List<Favorites> favorites;
 
-  FavoritesLoaded({this.favorites = const Favorites()});
+  FavoritesLoaded({this.favorites = const []});
 
   @override
-  List<Object> get props => [favorites];
+  List<Favorites> get favoritesList => favorites;
 }
 
 class FavoritesError extends FavoritesInitial {
@@ -28,3 +31,4 @@ class FavoritesError extends FavoritesInitial {
 
   FavoritesError({required this.message});
 }
+

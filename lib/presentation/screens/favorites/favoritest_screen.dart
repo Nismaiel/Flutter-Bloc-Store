@@ -1,4 +1,5 @@
-import 'package:bruva/business_logic/favorites/favorites_bloc.dart';
+import 'package:bruva/business_logic/favorites/favorites_cubit.dart';
+import 'package:bruva/business_logic/favorites/favorites_state.dart';
 import 'package:bruva/presentation/screens/product/product_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,16 +14,20 @@ class FavoritesScreen extends StatefulWidget {
   _FavoritesScreenState createState() => _FavoritesScreenState();
 }
 
-Bloc? bloc;
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-
+@override
+  void initState() {
+  context.read<FavoritesCubit>().getFavorites();
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
       body:
-      BlocBuilder<FavoritesBloc, FavoritesState>(builder: (context, state) {
+      BlocBuilder<FavoritesCubit, FavoritesState>(builder: (context, state) {
         if (state is FavoritesLoading) {
           return const Center(
             child: CircularProgressIndicator(color: Colors.red,),
@@ -51,19 +56,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         ListView.builder(
                             physics:const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: state.favorites.products.length,
+                            itemCount: state.favoritesList.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(CupertinoPageRoute(builder: (ctx)=>ProductInfo(product:state.favorites.products[index],)));
+                                  Navigator.of(context).push(CupertinoPageRoute(builder: (ctx)=>ProductInfo(product:state.favorites[index].product,)));
                                 },
                                 child: Card(
                                   child: Dismissible(
 
-                                    key: ValueKey(state.favorites.products[index].id),
+                                    key: ValueKey(state.favoritesList[index].product.id),
                                     direction: DismissDirection.endToStart,
                                     onDismissed: (direction) {
-                                      BlocProvider.of<FavoritesBloc >(context).add(RemoveFromFavorites(product: state.favorites.products[index]));
+                                      // BlocProvider.of<FavoritesBloc >(context).add(RemoveFromFavorites(product: state.favorites.products[index]));
                                     },
                                     background: Container(
                                       color: Colors.red,
@@ -80,10 +85,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                       ),
                                     ),
                                     child: ListTile(
-                                      leading: Image.network(state.favorites.products[index].images.first),
-                                      title: Text(state.favorites.products[index].name),
+                                      leading: Image.network(state.favoritesList[index].product.images.first),
+                                      title: Text(state.favoritesList[index].product.name),
                                       subtitle:
-                                      Text(state.favorites.products[index].price),
+                                      Text(state.favoritesList[index].product.price),
                                     ),
                                   ),
                                 ),

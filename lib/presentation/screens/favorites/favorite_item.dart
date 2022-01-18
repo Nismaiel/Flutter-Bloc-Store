@@ -1,4 +1,3 @@
-import 'package:bruva/business_logic/favorites/favorites_bloc.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +15,7 @@ class FavoritesItem extends StatelessWidget {
         key: ValueKey(product.id),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
-          BlocProvider.of<FavoritesBloc >(context).add(RemoveFromFavorites(product: product));
+          // BlocProvider.of<FavoritesBloc >(context).add(RemoveFromFavorites(product: product));
         },
         background: Container(
           color: Colors.red,

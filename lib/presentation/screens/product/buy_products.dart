@@ -2,7 +2,6 @@ import 'package:bruva/business_logic/auth/auth_bloc.dart';
 import 'package:bruva/business_logic/cart/cart_cubit.dart';
 import 'package:bruva/business_logic/cart/cart_state.dart';
 import 'package:bruva/business_logic/checkout/checkOut_bloc.dart';
-import 'package:bruva/business_logic/favorites/favorites_bloc.dart';
 import 'package:bruva/business_logic/products/product_bloc.dart';
 import 'package:bruva/data/models/product_model.dart';
 import 'package:bruva/presentation/screens/auth/landing.dart';
@@ -28,7 +27,6 @@ class _AllProductsState extends State<AllProducts> {
 
   @override
   void initState() {
-    BlocProvider.of<FavoritesBloc>(context);
     BlocProvider.of<CheckOutBloc>(context);
 
     bloc = BlocProvider.of<ProductBloc>(context)

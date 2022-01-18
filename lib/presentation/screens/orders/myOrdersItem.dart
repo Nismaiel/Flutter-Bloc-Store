@@ -1,8 +1,4 @@
-import 'package:bruva/business_logic/favorites/favorites_bloc.dart';
-import 'package:bruva/data/models/cart_model.dart';
-import 'package:bruva/data/models/product_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyOrdersItem extends StatelessWidget {
   final   cartItems;

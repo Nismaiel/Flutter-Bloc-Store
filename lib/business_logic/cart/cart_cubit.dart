@@ -17,7 +17,6 @@ class CartCubit extends Cubit<CartState> {
   final String cartUrl =
       'https://test-33476-default-rtdb.firebaseio.com/cart.json';
 
-  StreamController<CartItems> streamController = StreamController();
   int total = 0;
 
   getCartItems() async {
