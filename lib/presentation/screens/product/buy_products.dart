@@ -132,13 +132,13 @@ class _AllProductsState extends State<AllProducts> {
               onPressed: () {
                 Navigator.pushNamed(context, favoritesPage);
               }),
-          IconButton(
-              icon: const Icon(
-                Icons.shop, color: Colors.white,
-              ),
-              onPressed: () {
-              Navigator.of(context).push(CupertinoPageRoute(builder: (context) => AddProduct(),));
-              }),
+          // IconButton(
+          //     icon: const Icon(
+          //       Icons.shop, color: Colors.white,
+          //     ),
+          //     onPressed: () {
+          //     Navigator.of(context).push(CupertinoPageRoute(builder: (context) => AddProduct(),));
+          //     }),
         ],
         title: const Text(
           'BRUVA',
