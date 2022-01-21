@@ -2,7 +2,7 @@
 import 'package:bruva/data/models/product_model.dart';
 
 class CartItems{
-  late Product product;
+  late var product;
   late String size;
   late int color;
   late String id;

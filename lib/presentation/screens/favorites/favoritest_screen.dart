@@ -1,9 +1,13 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:bruva/business_logic/favorites/favorites_cubit.dart';
 import 'package:bruva/business_logic/favorites/favorites_state.dart';
 import 'package:bruva/presentation/screens/product/product_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 
 import '../../widgets.dart';
 
@@ -16,12 +20,17 @@ class FavoritesScreen extends StatefulWidget {
 
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
+
 @override
   void initState() {
+
   context.read<FavoritesCubit>().getFavorites();
     // TODO: implement initState
     super.initState();
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

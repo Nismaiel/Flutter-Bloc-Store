@@ -15,7 +15,8 @@ const CartItem({Key? key,required this.cartItems}):super(key: key);
         key: ValueKey(cartItems.id),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
-          context.read<CartCubit>().removeFromCart(cartItems.cartKey);
+          context.read<CartCubit>().removeFromCart(cartItems.id);
+
         },
         background: Container(
           color: Colors.red,
@@ -32,10 +33,10 @@ const CartItem({Key? key,required this.cartItems}):super(key: key);
           ),
         ),
         child: ListTile(
-          leading: Image.network(cartItems.product.images.first),
-          title: Text(cartItems.product.name),
+          leading: Image.network(cartItems.product["images"][0]),
+          title: Text(cartItems.product["name"]),
           subtitle:
-          Text(cartItems.product.price),
+          Text(cartItems.product["price"]),
           trailing: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text('size:${cartItems.size}'),

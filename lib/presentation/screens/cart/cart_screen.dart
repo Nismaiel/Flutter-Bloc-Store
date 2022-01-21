@@ -32,7 +32,28 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(248, 240, 227, 1),
-      body: BlocBuilder<CartCubit, CartState>(builder: (context, state) {
+      body:
+
+
+          // ListView.builder(
+          //     physics: const NeverScrollableScrollPhysics(),
+          //     shrinkWrap: true,
+          //     itemCount: state.cartItems.length,
+          //     itemBuilder: (context, index) {
+          //       return GestureDetector(
+          //         onTap: () {
+          //           Navigator.push(
+          //               context,
+          //               CupertinoPageRoute(
+          //                   builder: (context) => ProductInfo(
+          //                       product: state.cartItems[index].product)));
+          //         },
+          //         // child: CartItem(product: state.cartItems[index].product,color: state.cartItems[index].color,size: state.cartItems[index].size,id: state.cartItems[index].id,),
+          //       child: CartItem(cartItems: state.cartItems[index]),
+          //       );
+          //     }),
+
+      BlocBuilder<CartCubit, CartState>(builder: (context, state) {
         if (state is CartLoading) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -85,7 +106,6 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
               ),
-
 
 
               ListView.builder(

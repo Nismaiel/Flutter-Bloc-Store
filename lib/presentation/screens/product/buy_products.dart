@@ -118,7 +118,7 @@ class _AllProductsState extends State<AllProducts> {
               BlocBuilder<CartCubit, CartState>(builder: (context, state) {
                 if (state.cartItems != null &&
                     state.cartItems.isNotEmpty) {
-                  return Text(state.cartItems.length.toString());
+                  return Text(context.watch<CartCubit>().items.length.toString());
                 } else {
                   return const SizedBox();
                 }
